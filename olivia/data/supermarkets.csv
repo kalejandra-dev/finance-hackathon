@@ -1,0 +1,4 @@
+supermarket_id,name,address,distance_km,travel_cost_eur
+S1,SuperAhorro,Calle Ejemplo 1,0.8,0.4
+S2,MercaBarrio,Avenida Demo 22,1.6,0.8
+S3,FrescoMarket,Plaza Prueba 5,2.9,1.45

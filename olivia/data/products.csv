@@ -1,0 +1,115 @@
+item,supermarket_id,product_name,package_qty,unit,price_eur
+arroz,S1,Arroz redondo 1 kg,1000,g,1.19
+arroz,S2,Arroz redondo 1 kg,1000,g,1.35
+arroz,S3,Arroz redondo 1 kg,1000,g,1.20
+gambas,S1,Gambas peladas congeladas 400 g,400,g,5.65
+gambas,S2,Gambas peladas congeladas 400 g,400,g,5.11
+gambas,S3,Gambas peladas congeladas 400 g,400,g,5.72
+mejillones,S1,Mejillones frescos 1 kg,1000,g,3.09
+mejillones,S2,Mejillones frescos 1 kg,1000,g,2.63
+mejillones,S3,Mejillones frescos 1 kg,1000,g,2.81
+calamar,S1,Anillas de calamar 500 g,500,g,5.01
+calamar,S2,Anillas de calamar 500 g,500,g,5.88
+calamar,S3,Anillas de calamar 500 g,500,g,4.65
+pollo,S1,Muslos de pollo 1 kg,1000,g,6.66
+pollo,S2,Muslos de pollo 1 kg,1000,g,6.25
+pollo,S3,Muslos de pollo 1 kg,1000,g,6.29
+caldo de pescado,S1,Caldo de pescado 1 L,1000,ml,1.58
+caldo de pescado,S3,Caldo de pescado 1 L,1000,ml,1.76
+caldo de pollo,S1,Caldo de pollo 1 L,1000,ml,1.24
+caldo de pollo,S2,Caldo de pollo 1 L,1000,ml,1.28
+caldo de pollo,S3,Caldo de pollo 1 L,1000,ml,1.16
+aceite de oliva,S1,Aceite de oliva virgen extra 1 L,1000,ml,8.35
+aceite de oliva,S2,Aceite de oliva virgen extra 1 L,1000,ml,9.28
+aceite de oliva,S3,Aceite de oliva virgen extra 1 L,1000,ml,8.57
+tomate triturado,S1,Tomate triturado 400 g,400,g,0.76
+tomate triturado,S2,Tomate triturado 400 g,400,g,0.78
+tomate triturado,S3,Tomate triturado 400 g,400,g,0.74
+tomate,S1,Tomate pera 1 kg,1000,g,1.95
+tomate,S2,Tomate pera 1 kg,1000,g,2.37
+tomate,S3,Tomate pera 1 kg,1000,g,2.35
+cebolla,S1,Cebolla malla 1 kg,1000,g,1.65
+cebolla,S2,Cebolla malla 1 kg,1000,g,1.44
+cebolla,S3,Cebolla malla 1 kg,1000,g,1.46
+ajo,S1,Ajos (malla 3 cabezas),3,unidad,0.93
+ajo,S2,Ajos (malla 3 cabezas),3,unidad,1.01
+ajo,S3,Ajos (malla 3 cabezas),3,unidad,1.19
+pimiento rojo,S1,Pimiento rojo 500 g,500,g,1.64
+pimiento rojo,S2,Pimiento rojo 500 g,500,g,1.87
+pimiento rojo,S3,Pimiento rojo 500 g,500,g,1.39
+judía verde,S1,Judía verde plana 500 g,500,g,1.96
+judía verde,S2,Judía verde plana 500 g,500,g,2.09
+judía verde,S3,Judía verde plana 500 g,500,g,2.52
+limón,S1,Limones (malla 4 ud),4,unidad,1.09
+limón,S3,Limones (malla 4 ud),4,unidad,1.19
+azafrán,S1,Hebras de azafrán 1 g,1,g,3.30
+azafrán,S2,Hebras de azafrán 1 g,1,g,2.71
+azafrán,S3,Hebras de azafrán 1 g,1,g,2.92
+sal,S1,Sal fina 1 kg,1000,g,0.53
+sal,S2,Sal fina 1 kg,1000,g,0.42
+sal,S3,Sal fina 1 kg,1000,g,0.44
+pimentón,S1,Pimentón dulce 75 g,75,g,1.27
+pimentón,S3,Pimentón dulce 75 g,75,g,1.57
+leche,S1,Leche entera 1 L,1000,ml,0.79
+leche,S2,Leche entera 1 L,1000,ml,0.85
+leche,S3,Leche entera 1 L,1000,ml,0.77
+huevos,S1,Huevos L docena,12,unidad,2.96
+huevos,S3,Huevos L docena,12,unidad,2.98
+café,S1,Café molido 250 g,250,g,3.19
+café,S2,Café molido 250 g,250,g,3.21
+café,S3,Café molido 250 g,250,g,3.24
+pan,S1,Barra de pan,1,unidad,0.88
+pan,S2,Barra de pan,1,unidad,0.74
+pan,S3,Barra de pan,1,unidad,0.91
+pasta,S1,Macarrones 500 g,500,g,0.80
+pasta,S2,Macarrones 500 g,500,g,0.95
+pasta,S3,Macarrones 500 g,500,g,0.91
+patata,S1,Patatas 3 kg,3000,g,3.08
+patata,S2,Patatas 3 kg,3000,g,3.12
+patata,S3,Patatas 3 kg,3000,g,3.13
+queso rallado,S1,Queso rallado 200 g,200,g,2.01
+queso rallado,S2,Queso rallado 200 g,200,g,1.77
+queso rallado,S3,Queso rallado 200 g,200,g,1.60
+lechuga,S1,Lechuga iceberg,1,unidad,0.78
+lechuga,S2,Lechuga iceberg,1,unidad,0.80
+lechuga,S3,Lechuga iceberg,1,unidad,0.91
+plátano,S1,Plátano 1 kg,1000,g,2.21
+plátano,S2,Plátano 1 kg,1000,g,2.59
+plátano,S3,Plátano 1 kg,1000,g,2.29
+manzana,S1,Manzana golden 1 kg,1000,g,2.22
+manzana,S2,Manzana golden 1 kg,1000,g,1.97
+manzana,S3,Manzana golden 1 kg,1000,g,1.92
+yogur natural,S1,Yogur natural pack 4,4,unidad,1.44
+yogur natural,S2,Yogur natural pack 4,4,unidad,1.21
+yogur natural,S3,Yogur natural pack 4,4,unidad,1.17
+atún en lata,S1,Atún claro pack 3x80 g,240,g,2.80
+atún en lata,S2,Atún claro pack 3x80 g,240,g,2.41
+atún en lata,S3,Atún claro pack 3x80 g,240,g,3.13
+garbanzos cocidos,S1,Garbanzos cocidos 400 g,400,g,1.14
+garbanzos cocidos,S2,Garbanzos cocidos 400 g,400,g,1.02
+garbanzos cocidos,S3,Garbanzos cocidos 400 g,400,g,0.89
+lentejas,S1,Lentejas pardinas 1 kg,1000,g,1.50
+lentejas,S2,Lentejas pardinas 1 kg,1000,g,1.56
+lentejas,S3,Lentejas pardinas 1 kg,1000,g,1.84
+carne picada,S1,Carne picada mixta 500 g,500,g,3.45
+carne picada,S2,Carne picada mixta 500 g,500,g,3.77
+carne picada,S3,Carne picada mixta 500 g,500,g,3.41
+salmón,S1,Lomos de salmón 400 g,400,g,6.39
+salmón,S2,Lomos de salmón 400 g,400,g,6.03
+salmón,S3,Lomos de salmón 400 g,400,g,6.28
+mantequilla,S1,Mantequilla 250 g,250,g,2.75
+mantequilla,S2,Mantequilla 250 g,250,g,2.80
+mantequilla,S3,Mantequilla 250 g,250,g,2.51
+harina,S1,Harina de trigo 1 kg,1000,g,0.89
+harina,S2,Harina de trigo 1 kg,1000,g,0.69
+harina,S3,Harina de trigo 1 kg,1000,g,0.75
+azúcar,S1,Azúcar blanco 1 kg,1000,g,1.07
+azúcar,S3,Azúcar blanco 1 kg,1000,g,0.96
+zanahoria,S1,Zanahoria 1 kg,1000,g,1.14
+zanahoria,S2,Zanahoria 1 kg,1000,g,1.05
+zanahoria,S3,Zanahoria 1 kg,1000,g,1.13
+calabacín,S1,Calabacín 1 kg,1000,g,2.00
+calabacín,S2,Calabacín 1 kg,1000,g,1.92
+calabacín,S3,Calabacín 1 kg,1000,g,1.98
+pechuga de pavo,S1,Pechuga de pavo lonchas 250 g,250,g,2.05
+pechuga de pavo,S3,Pechuga de pavo lonchas 250 g,250,g,1.67
