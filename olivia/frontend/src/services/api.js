@@ -18,7 +18,10 @@ export const api = {
     const form = new FormData();
     form.append("file", blob, filename);
     const res = await fetch("/api/voice/transcribe", { method: "POST", body: form });
-    if (!res.ok) throw new Error("No se pudo transcribir el audio");
+    if (!res.ok) {
+      const err = await res.json().catch(() => ({}));
+      throw new Error(err.detail || "No se pudo transcribir el audio");
+    }
     return (await res.json()).text;
   },
   speak: async (text) => {

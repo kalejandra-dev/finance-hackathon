@@ -1,7 +1,10 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import Home from "./pages/Home.jsx";
 import Planner from "./pages/Planner.jsx";
 import ShoppingList from "./pages/ShoppingList.jsx";
 import Results from "./pages/Results.jsx";
+import Settings from "./components/Settings.jsx";
+import { stopSpeaking } from "./services/voice.js";
 
 const STEPS = [
   { id: "planner", label: "1. Planificar" },
@@ -9,44 +12,78 @@ const STEPS = [
   { id: "results", label: "3. Resultados" },
 ];
 
+const DEFAULT_SETTINGS = { scale: 1, contrast: false, autoVoice: true };
+
+function loadSettings() {
+  try {
+    return { ...DEFAULT_SETTINGS, ...JSON.parse(localStorage.getItem("olivia-settings") || "{}") };
+  } catch {
+    return DEFAULT_SETTINGS;
+  }
+}
+
 export default function App() {
-  const [step, setStep] = useState("planner");
+  const [step, setStep] = useState("home");
   const [items, setItems] = useState([]);
   const [budget, setBudget] = useState(35);
   const [maxStores, setMaxStores] = useState(2);
   const [result, setResult] = useState(null);
+  const [settings, setSettings] = useState(loadSettings);
+
+  useEffect(() => {
+    document.documentElement.style.fontSize = `${settings.scale * 100}%`;
+    document.documentElement.classList.toggle("high-contrast", settings.contrast);
+    try {
+      localStorage.setItem("olivia-settings", JSON.stringify(settings));
+    } catch {
+      /* sin almacenamiento: los ajustes duran solo esta sesión */
+    }
+  }, [settings]);
+
+  const go = (s) => {
+    stopSpeaking();
+    setStep(s);
+    window.scrollTo(0, 0);
+  };
 
   return (
     <>
       <a className="skip-link" href="#main">Saltar al contenido</a>
       <header className="header">
-        <h1>🫒 OlivIA</h1>
+        <Settings settings={settings} setSettings={setSettings} />
+        <button className="brand" onClick={() => go("home")} aria-label="OlivIA, ir al inicio">
+          <h1>🫒 OlivIA</h1>
+        </button>
         <p className="tagline">Compra mejor. Ahorra más.</p>
-        <nav aria-label="Pasos">
-          <ol className="steps">
-            {STEPS.map((s) => (
-              <li key={s.id}>
-                <button
-                  className={step === s.id ? "step active" : "step"}
-                  aria-current={step === s.id ? "step" : undefined}
-                  onClick={() => setStep(s.id)}
-                  disabled={(s.id === "list" && !items.length) || (s.id === "results" && !result)}
-                >
-                  {s.label}
-                </button>
-              </li>
-            ))}
-          </ol>
-        </nav>
+        {step !== "home" && (
+          <nav aria-label="Pasos">
+            <ol className="steps">
+              {STEPS.map((s) => (
+                <li key={s.id}>
+                  <button
+                    className={step === s.id ? "step active" : "step"}
+                    aria-current={step === s.id ? "step" : undefined}
+                    onClick={() => go(s.id)}
+                    disabled={(s.id === "list" && !items.length) || (s.id === "results" && !result)}
+                  >
+                    {s.label}
+                  </button>
+                </li>
+              ))}
+            </ol>
+          </nav>
+        )}
       </header>
 
       <main id="main">
+        {step === "home" && <Home onStart={() => go("planner")} />}
         {step === "planner" && (
           <Planner
             items={items} setItems={setItems}
             budget={budget} setBudget={setBudget}
             maxStores={maxStores} setMaxStores={setMaxStores}
-            onDone={() => setStep("list")}
+            autoVoice={settings.autoVoice}
+            onDone={() => go("list")}
           />
         )}
         {step === "list" && (
@@ -54,10 +91,12 @@ export default function App() {
             items={items} setItems={setItems}
             budget={budget} setBudget={setBudget}
             maxStores={maxStores} setMaxStores={setMaxStores}
-            onOptimized={(r) => { setResult(r); setStep("results"); }}
+            onOptimized={(r) => { setResult(r); go("results"); }}
           />
         )}
-        {step === "results" && result && <Results result={result} />}
+        {step === "results" && result && (
+          <Results result={result} autoVoice={settings.autoVoice} onEdit={() => go("list")} />
+        )}
       </main>
 
       <footer className="footer">Precios de demostración: datos de ejemplo, no son precios reales.</footer>

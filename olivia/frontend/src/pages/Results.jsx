@@ -1,62 +1,97 @@
+import { useEffect } from "react";
+import { resultSummary, speak } from "../services/voice.js";
+
 const eur = (n) => (n == null ? "—" : `${n.toFixed(2).replace(".", ",")} €`);
 
-function PlanCard({ title, plan }) {
+function PlanCard({ title, plan, best }) {
   if (!plan) return (
     <div className="card"><h3>{title}</h3><p>Ningún supermercado tiene todos los productos.</p></div>
   );
   return (
-    <div className="card">
+    <div className={best ? "card plan best" : "card plan"}>
+      {best && <span className="badge">✓ Recomendada</span>}
       <h3>{title}</h3>
       <dl className="kv">
         <dt>Productos</dt><dd>{eur(plan.products_cost)}</dd>
         <dt>Desplazamiento</dt><dd>{eur(plan.travel_cost)}</dd>
-        <dt>Total</dt><dd><strong>{eur(plan.total_cost)}</strong></dd>
-        <dt>Supermercados</dt><dd>{plan.stores.map((s) => s.name).join(" + ")}</dd>
+        <dt>Total</dt><dd><strong className="big-number">{eur(plan.total_cost)}</strong></dd>
+        <dt>Dónde</dt><dd>{plan.stores.map((s) => s.name).join(" + ")}</dd>
       </dl>
     </div>
   );
 }
 
-export default function Results({ result }) {
-  const { optimized, best_single_store: single, net_saving, remaining_budget, within_budget, unavailable_items } = result;
+function BudgetBar({ spent, budget }) {
+  if (budget == null || !budget) return null;
+  const pct = Math.min(100, (spent / budget) * 100);
+  const over = spent > budget;
+  return (
+    <div className="budget">
+      <div className="budget-labels">
+        <span>Gastas <strong>{eur(spent)}</strong></span>
+        <span>Presupuesto <strong>{eur(budget)}</strong></span>
+      </div>
+      <div className="bar" role="progressbar" aria-valuemin={0} aria-valuemax={budget} aria-valuenow={spent}
+        aria-label={`Has usado el ${Math.round((spent / budget) * 100)} % del presupuesto`}>
+        <div className={over ? "bar-fill over" : "bar-fill"} style={{ width: `${pct}%` }} />
+      </div>
+      <p className={over ? "error" : "ok"}>
+        {over ? `Te pasas en ${eur(spent - budget)}. Prueba a quitar o sustituir algún producto.`
+              : `Te quedan ${eur(budget - spent)}.`}
+      </p>
+    </div>
+  );
+}
+
+export default function Results({ result, autoVoice, onEdit }) {
+  const { optimized, best_single_store: single, net_saving, budget, unavailable_items } = result;
+  const summary = resultSummary(result);
+
+  useEffect(() => { if (autoVoice) speak(summary); }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   return (
     <section aria-labelledby="results-title">
       <h2 id="results-title">Tu compra optimizada</h2>
 
-      {net_saving != null && (
-        <p className="highlight" role="status">
-          {net_saving > 0
-            ? <>Ahorras <strong>{eur(net_saving)}</strong> (ya descontando el desplazamiento).</>
-            : <>Comprar todo en un solo supermercado ya es la mejor opción.</>}
-        </p>
-      )}
-      {within_budget === false && (
-        <p role="alert" className="error">Te pasas del presupuesto en {eur(-remaining_budget)}. Prueba a quitar o sustituir algún producto.</p>
-      )}
-      {within_budget && <p>Te quedan <strong>{eur(remaining_budget)}</strong> de presupuesto.</p>}
+      <div className="saving" role="status">
+        {net_saving > 0 ? (
+          <>
+            <span className="saving-label">Ahorras</span>
+            <span className="saving-amount">{eur(net_saving)}</span>
+            <span className="saving-note">frente a comprarlo todo en un solo supermercado, ya descontando el desplazamiento</span>
+          </>
+        ) : (
+          <span className="saving-note">Comprar todo en un solo supermercado ya es la opción más barata. ¡Te ahorras el viaje extra!</span>
+        )}
+        <button className="btn" onClick={() => speak(summary)}>🔊 Escuchar resumen</button>
+      </div>
+
+      {optimized && <BudgetBar spent={optimized.total_cost} budget={budget} />}
 
       <div className="grid">
         <PlanCard title="Todo en un supermercado" plan={single} />
-        <PlanCard title="Compra optimizada" plan={optimized} />
+        <PlanCard title="Compra optimizada" plan={optimized} best={net_saving > 0} />
       </div>
 
+      <h3 className="section-title">🗺️ Tu ruta de compra</h3>
       {optimized?.stores.map((s, idx) => (
         <div key={s.supermarket_id} className="card">
-          <h3>Parada {idx + 1}: {s.name} <small>({s.address} · {s.distance_km} km)</small></h3>
-          <table className="table">
-            <thead><tr><th scope="col">Producto</th><th scope="col">Envase</th><th scope="col">Uds.</th><th scope="col">Precio</th></tr></thead>
-            <tbody>
-              {optimized.assignments.filter((a) => a.supermarket_id === s.supermarket_id).map((a) => (
-                <tr key={a.item}><td>{a.item}</td><td>{a.product_name}</td><td>{a.packages}</td><td>{eur(a.line_total)}</td></tr>
-              ))}
-            </tbody>
-          </table>
-          <p>Subtotal: <strong>{eur(s.subtotal)}</strong></p>
+          <h3><span className="stop">{idx + 1}</span> {s.name} <small className="muted">· {s.address} · {s.distance_km} km</small></h3>
+          <ul className="buy-list">
+            {optimized.assignments.filter((a) => a.supermarket_id === s.supermarket_id).map((a) => (
+              <li key={a.item}>
+                <span>{a.packages > 1 ? `${a.packages} × ` : ""}{a.product_name}</span>
+                <span>{eur(a.line_total)}</span>
+              </li>
+            ))}
+          </ul>
+          <p className="subtotal">Subtotal: <strong>{eur(s.subtotal)}</strong></p>
         </div>
       ))}
 
       {unavailable_items?.length > 0 && <p className="error">No disponibles: {unavailable_items.join(", ")}</p>}
+
+      <button className="btn big" onClick={onEdit}>← Cambiar mi lista</button>
     </section>
   );
 }
