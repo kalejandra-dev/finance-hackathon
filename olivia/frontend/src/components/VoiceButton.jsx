@@ -22,7 +22,10 @@ export default function VoiceButton({ onText, disabled }) {
         stream.getTracks().forEach((t) => t.stop());
         setRecording(false);
         try {
-          onText(await api.transcribe(new Blob(chunks, { type: "audio/webm" })));
+          // Chrome graba en webm y Safari en mp4
+          const type = rec.mimeType || "audio/webm";
+          const filename = type.includes("mp4") ? "audio.mp4" : "audio.webm";
+          onText(await api.transcribe(new Blob(chunks, { type }), filename));
         } catch (e) {
           setError(e.message);
         }

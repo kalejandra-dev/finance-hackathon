@@ -1,37 +1,41 @@
-"""Voz con ElevenLabs: speech-to-text y text-to-speech.
+"""Voz con ElevenLabs (SDK oficial de Python): speech-to-text y text-to-speech.
 
-⚠️ SIN PROBAR todavía: revisad los endpoints, modelos y voice_id en la documentación
-actual de ElevenLabs (https://elevenlabs.io/docs) antes de la demo.
+La API key NO va en el código: el SDK lee ELEVENLABS_API_KEY del entorno
+(app/main.py carga .env y .env.local al arrancar).
 """
 import os
+from functools import lru_cache
+from io import BytesIO
 
-import httpx
+from elevenlabs import ElevenLabs
 
-BASE_URL = "https://api.elevenlabs.io/v1"
-STT_MODEL = os.getenv("ELEVENLABS_STT_MODEL", "scribe_v1")
-TTS_MODEL = os.getenv("ELEVENLABS_TTS_MODEL", "eleven_multilingual_v2")
-VOICE_ID = os.getenv("ELEVENLABS_VOICE_ID", "")
+STT_MODEL = os.getenv("ELEVENLABS_STT_MODEL", "scribe_v2")
+TTS_MODEL = os.getenv("ELEVENLABS_TTS_MODEL", "eleven_v4")
+# Voz por defecto: Sarah (multilingüe). Cambiadla en .env con ELEVENLABS_VOICE_ID.
+VOICE_ID = os.getenv("ELEVENLABS_VOICE_ID") or "EXAVITQu4vr4xnSDxMaL"
+LANGUAGE = "es"
 
 
-def _headers() -> dict:
-    key = os.getenv("ELEVENLABS_API_KEY")
-    if not key:
-        raise RuntimeError("Falta ELEVENLABS_API_KEY en el .env")
-    return {"xi-api-key": key}
+@lru_cache
+def _client() -> ElevenLabs:
+    return ElevenLabs()  # lee ELEVENLABS_API_KEY del entorno
 
 
 def transcribe(audio: bytes, filename: str = "audio.webm") -> str:
-    r = httpx.post(f"{BASE_URL}/speech-to-text", headers=_headers(),
-                   data={"model_id": STT_MODEL, "language_code": "es"},
-                   files={"file": (filename, audio)}, timeout=60)
-    r.raise_for_status()
-    return r.json().get("text", "")
+    """Audio del micrófono -> texto (Scribe v2)."""
+    file = BytesIO(audio)
+    file.name = filename  # ayuda a identificar el formato (webm en Chrome, mp4 en Safari)
+    result = _client().speech_to_text.convert(file=file, model_id=STT_MODEL, language_code=LANGUAGE)
+    return result.text.strip()
 
 
 def speak(text: str) -> bytes:
-    if not VOICE_ID:
-        raise RuntimeError("Falta ELEVENLABS_VOICE_ID en el .env")
-    r = httpx.post(f"{BASE_URL}/text-to-speech/{VOICE_ID}", headers=_headers(),
-                   json={"text": text, "model_id": TTS_MODEL}, timeout=60)
-    r.raise_for_status()
-    return r.content  # audio/mpeg
+    """Texto -> audio MP3 para leer en voz alta las respuestas de OlivIA."""
+    audio = _client().text_to_speech.convert(
+        text=text,
+        voice_id=VOICE_ID,
+        model_id=TTS_MODEL,
+        language_code=LANGUAGE,
+        output_format="mp3_44100_128",
+    )
+    return b"".join(audio)

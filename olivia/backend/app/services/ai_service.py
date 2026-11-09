@@ -27,6 +27,7 @@ Puedes:
 - Interpretar presupuestos y restricciones (presupuesto máximo, número máximo de supermercados).
 
 Reglas:
+- Responde SIEMPRE llamando a la herramienta olivia_response, nunca solo con texto.
 - No inventes precios, disponibilidad, descuentos ni distancias: los proporciona la aplicación.
 - No calcules cuál es el supermercado más barato: eso lo hace el optimizador.
 - Usa SOLO nombres de producto del catálogo y SU unidad (g, ml o unidad). Convierte cantidades a esa unidad
@@ -128,8 +129,15 @@ def interpret(req: InterpretRequest) -> AIResult:
         max_tokens=1500,
         system=SYSTEM_PROMPT.format(catalog=catalog_txt),
         tools=[tool],
-        tool_choice={"type": "tool", "name": tool["name"]},
+        # Este modelo no admite forzar la herramienta (tool_choice "tool"/"any"),
+        # así que usamos "auto" y el system prompt le pide usarla siempre.
+        tool_choice={"type": "auto"},
         messages=[{"role": "user", "content": _user_message(req)}],
     )
-    tool_use = next(block for block in response.content if block.type == "tool_use")
+    tool_use = next((b for b in response.content if b.type == "tool_use"), None)
+    if tool_use is None:
+        # Red de seguridad: si contesta solo con texto, no rompemos la app
+        text = " ".join(b.text for b in response.content if b.type == "text").strip()
+        return AIResult(intent="other", reply=text or "¿Puedes repetirlo de otra forma?",
+                        items=req.current_items, requires_clarification=True)
     return _fix_units(AIResult.model_validate(tool_use.input))
