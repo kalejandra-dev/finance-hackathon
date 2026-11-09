@@ -14,9 +14,9 @@ export const api = {
   interpret: async (body) => (await request("/ai/interpret", { method: "POST", body: JSON.stringify(body) })).json(),
   optimize: async (body) => (await request("/optimize", { method: "POST", body: JSON.stringify(body) })).json(),
   products: async () => (await request("/products")).json(),
-  transcribe: async (blob) => {
+  transcribe: async (blob, filename = "audio.webm") => {
     const form = new FormData();
-    form.append("file", blob, "audio.webm");
+    form.append("file", blob, filename);
     const res = await fetch("/api/voice/transcribe", { method: "POST", body: form });
     if (!res.ok) throw new Error("No se pudo transcribir el audio");
     return (await res.json()).text;

@@ -25,14 +25,25 @@ def products():
 def supermarkets():
     return list(catalog.get_supermarkets().values())
 
-
 @router.post("/ai/interpret", response_model=AIResult)
 def interpret(req: InterpretRequest):
     try:
         return ai_service.interpret(req)
-    except Exception as e:  # no exponer trazas al usuario
+    except Exception as e:
+        import traceback
+        traceback.print_exc()
         raise HTTPException(status_code=502, detail=f"Error del servicio de IA: {type(e).__name__}")
-
+    
+@router.post("/voice/transcribe")
+async def transcribe(file: UploadFile = File(...)):
+    audio = await file.read()
+    print(f"[voz] recibido {file.filename}, {len(audio)} bytes")
+    try:
+        return {"text": voice_service.transcribe(audio, file.filename or "audio.webm")}
+    except Exception as e:
+        import traceback
+        traceback.print_exc()
+        raise HTTPException(502, f"Error de voz: {e}")
 
 class ShoppingList(BaseModel):
     items: list[ListItem]

@@ -3,7 +3,9 @@ from pathlib import Path
 
 from dotenv import load_dotenv
 
-load_dotenv(Path(__file__).resolve().parents[2] / ".env")
+ROOT = Path(__file__).resolve().parents[2]
+load_dotenv(ROOT / ".env.local")  # aquí guarda la key de ElevenLabs su CLI
+load_dotenv(ROOT / ".env")
 
 from fastapi import FastAPI  # noqa: E402
 from fastapi.middleware.cors import CORSMiddleware  # noqa: E402

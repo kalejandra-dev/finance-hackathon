@@ -113,3 +113,231 @@ calabacín,S2,Calabacín 1 kg,1000,g,1.92
 calabacín,S3,Calabacín 1 kg,1000,g,1.98
 pechuga de pavo,S1,Pechuga de pavo lonchas 250 g,250,g,2.05
 pechuga de pavo,S3,Pechuga de pavo lonchas 250 g,250,g,1.67
+panceta,S1,Panceta curada en tiras 250 g,250,g,2.36
+panceta,S2,Panceta curada en tiras 250 g,250,g,2.61
+panceta,S3,Panceta curada en tiras 250 g,250,g,2.98
+bacon,S1,Bacon ahumado lonchas 200 g,200,g,1.72
+bacon,S2,Bacon ahumado lonchas 200 g,200,g,1.96
+bacon,S3,Bacon ahumado lonchas 200 g,200,g,1.96
+guanciale,S1,Guanciale 150 g,150,g,4.17
+guanciale,S2,Guanciale 150 g,150,g,4.17
+guanciale,S3,Guanciale 150 g,150,g,4.34
+chorizo,S1,Chorizo extra 250 g,250,g,2.54
+chorizo,S2,Chorizo extra 250 g,250,g,2.21
+chorizo,S3,Chorizo extra 250 g,250,g,2.53
+jamón serrano,S1,Jamón serrano lonchas 150 g,150,g,2.54
+jamón serrano,S2,Jamón serrano lonchas 150 g,150,g,2.76
+jamón serrano,S3,Jamón serrano lonchas 150 g,150,g,3.16
+jamón cocido,S1,Jamón cocido lonchas 200 g,200,g,2.19
+jamón cocido,S2,Jamón cocido lonchas 200 g,200,g,1.92
+jamón cocido,S3,Jamón cocido lonchas 200 g,200,g,1.92
+pechuga de pollo,S1,Pechuga de pollo fileteada 1 kg,1000,g,8.03
+pechuga de pollo,S2,Pechuga de pollo fileteada 1 kg,1000,g,7.86
+pechuga de pollo,S3,Pechuga de pollo fileteada 1 kg,1000,g,8.64
+pollo entero,S1,"Pollo entero 1,8 kg",1800,g,6.92
+pollo entero,S3,"Pollo entero 1,8 kg",1800,g,6.55
+lomo de cerdo,S1,Lomo de cerdo fileteado 500 g,500,g,4.56
+lomo de cerdo,S2,Lomo de cerdo fileteado 500 g,500,g,4.44
+lomo de cerdo,S3,Lomo de cerdo fileteado 500 g,500,g,5.19
+costillas de cerdo,S1,Costillas de cerdo 1 kg,1000,g,6.82
+costillas de cerdo,S2,Costillas de cerdo 1 kg,1000,g,5.57
+costillas de cerdo,S3,Costillas de cerdo 1 kg,1000,g,7.09
+ternera para guisar,S1,Ternera para guisar 500 g,500,g,6.58
+ternera para guisar,S2,Ternera para guisar 500 g,500,g,6.59
+ternera para guisar,S3,Ternera para guisar 500 g,500,g,7.09
+hamburguesa,S1,Hamburguesas de ternera 4 ud,4,unidad,3.60
+hamburguesa,S3,Hamburguesas de ternera 4 ud,4,unidad,3.64
+salchichas,S1,Salchichas frescas 6 ud,6,unidad,2.01
+salchichas,S2,Salchichas frescas 6 ud,6,unidad,1.89
+salchichas,S3,Salchichas frescas 6 ud,6,unidad,2.22
+morcilla,S1,Morcilla de cebolla 250 g,250,g,1.70
+morcilla,S2,Morcilla de cebolla 250 g,250,g,2.03
+morcilla,S3,Morcilla de cebolla 250 g,250,g,1.80
+merluza,S1,Merluza en rodajas 500 g,500,g,6.53
+merluza,S3,Merluza en rodajas 500 g,500,g,5.88
+bacalao,S1,Bacalao desalado 400 g,400,g,5.65
+bacalao,S3,Bacalao desalado 400 g,400,g,6.74
+almejas,S1,Almejas 500 g,500,g,6.01
+almejas,S3,Almejas 500 g,500,g,5.81
+sepia,S1,Sepia limpia 500 g,500,g,5.76
+sepia,S2,Sepia limpia 500 g,500,g,5.33
+sepia,S3,Sepia limpia 500 g,500,g,6.71
+palitos de cangrejo,S1,Palitos de surimi 250 g,250,g,1.65
+palitos de cangrejo,S2,Palitos de surimi 250 g,250,g,1.59
+palitos de cangrejo,S3,Palitos de surimi 250 g,250,g,1.88
+sardinas en lata,S1,Sardinas en aceite 120 g,120,g,1.45
+sardinas en lata,S2,Sardinas en aceite 120 g,120,g,1.32
+sardinas en lata,S3,Sardinas en aceite 120 g,120,g,1.40
+anchoas,S1,Anchoas en aceite 50 g,50,g,2.29
+anchoas,S2,Anchoas en aceite 50 g,50,g,2.40
+anchoas,S3,Anchoas en aceite 50 g,50,g,2.40
+nata para cocinar,S1,Nata para cocinar 200 ml,200,ml,1.04
+nata para cocinar,S2,Nata para cocinar 200 ml,200,ml,0.89
+nata para cocinar,S3,Nata para cocinar 200 ml,200,ml,0.88
+queso parmesano,S1,Parmesano rallado 150 g,150,g,2.84
+queso parmesano,S2,Parmesano rallado 150 g,150,g,3.29
+queso parmesano,S3,Parmesano rallado 150 g,150,g,3.18
+queso pecorino,S1,Pecorino romano 150 g,150,g,3.62
+queso pecorino,S2,Pecorino romano 150 g,150,g,4.06
+queso pecorino,S3,Pecorino romano 150 g,150,g,3.31
+mozzarella,S1,Mozzarella fresca 125 g,125,g,0.95
+mozzarella,S2,Mozzarella fresca 125 g,125,g,1.04
+mozzarella,S3,Mozzarella fresca 125 g,125,g,1.07
+queso en lonchas,S1,Queso en lonchas 200 g,200,g,1.93
+queso en lonchas,S2,Queso en lonchas 200 g,200,g,2.09
+queso en lonchas,S3,Queso en lonchas 200 g,200,g,1.79
+queso fresco,S1,Queso fresco 250 g,250,g,1.87
+queso fresco,S3,Queso fresco 250 g,250,g,1.84
+leche desnatada,S1,Leche desnatada 1 L,1000,ml,0.95
+leche desnatada,S2,Leche desnatada 1 L,1000,ml,0.88
+leche desnatada,S3,Leche desnatada 1 L,1000,ml,1.06
+bebida de avena,S1,Bebida de avena 1 L,1000,ml,1.56
+bebida de avena,S2,Bebida de avena 1 L,1000,ml,1.39
+bebida de avena,S3,Bebida de avena 1 L,1000,ml,1.18
+yogur griego,S1,Yogur griego pack 4,4,unidad,1.70
+yogur griego,S2,Yogur griego pack 4,4,unidad,1.58
+yogur griego,S3,Yogur griego pack 4,4,unidad,1.99
+pimiento verde,S1,Pimiento verde italiano 500 g,500,g,1.47
+pimiento verde,S2,Pimiento verde italiano 500 g,500,g,1.28
+pimiento verde,S3,Pimiento verde italiano 500 g,500,g,1.23
+berenjena,S1,Berenjena 1 kg,1000,g,2.14
+berenjena,S2,Berenjena 1 kg,1000,g,1.84
+berenjena,S3,Berenjena 1 kg,1000,g,2.36
+champiñones,S1,Champiñón laminado 250 g,250,g,1.22
+champiñones,S2,Champiñón laminado 250 g,250,g,1.40
+champiñones,S3,Champiñón laminado 250 g,250,g,1.54
+espinacas,S1,Espinacas frescas 300 g,300,g,1.56
+espinacas,S2,Espinacas frescas 300 g,300,g,1.34
+espinacas,S3,Espinacas frescas 300 g,300,g,1.41
+brócoli,S1,Brócoli 500 g,500,g,1.63
+brócoli,S2,Brócoli 500 g,500,g,1.82
+brócoli,S3,Brócoli 500 g,500,g,1.61
+pepino,S1,Pepino,1,unidad,0.58
+pepino,S3,Pepino,1,unidad,0.50
+aguacate,S1,Aguacates 2 ud,2,unidad,2.25
+aguacate,S2,Aguacates 2 ud,2,unidad,2.45
+aguacate,S3,Aguacates 2 ud,2,unidad,2.23
+puerro,S1,Puerros 3 ud,3,unidad,1.26
+puerro,S2,Puerros 3 ud,3,unidad,1.58
+puerro,S3,Puerros 3 ud,3,unidad,1.56
+perejil,S1,Perejil manojo,1,unidad,0.88
+perejil,S2,Perejil manojo,1,unidad,0.78
+perejil,S3,Perejil manojo,1,unidad,0.90
+albahaca,S1,Albahaca fresca,1,unidad,1.21
+albahaca,S2,Albahaca fresca,1,unidad,1.03
+albahaca,S3,Albahaca fresca,1,unidad,1.03
+naranja,S1,Naranjas 2 kg,2000,g,3.17
+naranja,S3,Naranjas 2 kg,2000,g,2.76
+fresas,S1,Fresas 500 g,500,g,2.41
+fresas,S2,Fresas 500 g,500,g,2.14
+fresas,S3,Fresas 500 g,500,g,2.53
+guisantes congelados,S1,Guisantes congelados 400 g,400,g,1.15
+guisantes congelados,S2,Guisantes congelados 400 g,400,g,1.14
+guisantes congelados,S3,Guisantes congelados 400 g,400,g,1.04
+maíz dulce,S1,Maíz dulce lata 300 g,300,g,1.22
+maíz dulce,S2,Maíz dulce lata 300 g,300,g,1.20
+maíz dulce,S3,Maíz dulce lata 300 g,300,g,0.97
+pimientos del piquillo,S1,Pimientos del piquillo 225 g,225,g,1.61
+pimientos del piquillo,S2,Pimientos del piquillo 225 g,225,g,1.52
+pimientos del piquillo,S3,Pimientos del piquillo 225 g,225,g,1.68
+pimienta negra,S1,Pimienta negra molida 50 g,50,g,1.46
+pimienta negra,S3,Pimienta negra molida 50 g,50,g,1.36
+orégano,S1,Orégano 15 g,15,g,0.88
+orégano,S2,Orégano 15 g,15,g,0.82
+orégano,S3,Orégano 15 g,15,g,0.98
+comino,S1,Comino molido 40 g,40,g,1.19
+comino,S2,Comino molido 40 g,40,g,1.18
+comino,S3,Comino molido 40 g,40,g,0.98
+canela,S1,Canela molida 40 g,40,g,1.26
+canela,S2,Canela molida 40 g,40,g,1.07
+canela,S3,Canela molida 40 g,40,g,1.23
+laurel,S1,Hojas de laurel 10 g,10,g,0.96
+laurel,S2,Hojas de laurel 10 g,10,g,1.02
+laurel,S3,Hojas de laurel 10 g,10,g,0.79
+curry,S1,Curry en polvo 40 g,40,g,1.41
+curry,S2,Curry en polvo 40 g,40,g,1.27
+curry,S3,Curry en polvo 40 g,40,g,1.27
+vinagre,S1,Vinagre de vino 1 L,1000,ml,0.81
+vinagre,S2,Vinagre de vino 1 L,1000,ml,0.86
+vinagre,S3,Vinagre de vino 1 L,1000,ml,0.83
+aceite de girasol,S1,Aceite de girasol 1 L,1000,ml,2.10
+aceite de girasol,S2,Aceite de girasol 1 L,1000,ml,2.05
+aceite de girasol,S3,Aceite de girasol 1 L,1000,ml,2.10
+espaguetis,S1,Espaguetis 500 g,500,g,0.91
+espaguetis,S2,Espaguetis 500 g,500,g,0.84
+espaguetis,S3,Espaguetis 500 g,500,g,1.07
+tallarines,S1,Tallarines 500 g,500,g,1.18
+tallarines,S2,Tallarines 500 g,500,g,1.21
+tallarines,S3,Tallarines 500 g,500,g,1.00
+fideos,S1,Fideos para sopa 500 g,500,g,1.00
+fideos,S2,Fideos para sopa 500 g,500,g,0.94
+fideos,S3,Fideos para sopa 500 g,500,g,0.88
+lasaña,S1,Placas de lasaña 250 g,250,g,1.50
+lasaña,S2,Placas de lasaña 250 g,250,g,1.47
+lasaña,S3,Placas de lasaña 250 g,250,g,1.66
+arroz basmati,S1,Arroz basmati 1 kg,1000,g,2.12
+arroz basmati,S2,Arroz basmati 1 kg,1000,g,2.24
+arroz basmati,S3,Arroz basmati 1 kg,1000,g,2.28
+alubias cocidas,S1,Alubias blancas cocidas 400 g,400,g,0.96
+alubias cocidas,S3,Alubias blancas cocidas 400 g,400,g,1.04
+tomate frito,S1,Tomate frito 400 g,400,g,1.00
+tomate frito,S2,Tomate frito 400 g,400,g,0.91
+tomate frito,S3,Tomate frito 400 g,400,g,0.92
+masa de pizza,S1,Masa de pizza fresca,1,unidad,1.42
+masa de pizza,S2,Masa de pizza fresca,1,unidad,1.32
+masa de pizza,S3,Masa de pizza fresca,1,unidad,1.38
+pan de molde,S1,Pan de molde,1,unidad,1.44
+pan de molde,S2,Pan de molde,1,unidad,1.37
+pan de molde,S3,Pan de molde,1,unidad,1.44
+tortillas de trigo,S1,Tortillas de trigo 8 ud,8,unidad,1.69
+tortillas de trigo,S2,Tortillas de trigo 8 ud,8,unidad,1.66
+tortillas de trigo,S3,Tortillas de trigo 8 ud,8,unidad,1.62
+pan rallado,S1,Pan rallado 250 g,250,g,0.76
+pan rallado,S2,Pan rallado 250 g,250,g,0.75
+pan rallado,S3,Pan rallado 250 g,250,g,0.75
+levadura,S1,Levadura química 50 g,50,g,1.04
+levadura,S3,Levadura química 50 g,50,g,1.07
+chocolate,S1,Chocolate negro 150 g,150,g,1.75
+chocolate,S2,Chocolate negro 150 g,150,g,1.56
+chocolate,S3,Chocolate negro 150 g,150,g,1.32
+mayonesa,S1,Mayonesa 450 ml,450,ml,1.72
+mayonesa,S3,Mayonesa 450 ml,450,ml,1.65
+ketchup,S1,Ketchup 500 ml,500,ml,1.78
+ketchup,S2,Ketchup 500 ml,500,ml,1.92
+ketchup,S3,Ketchup 500 ml,500,ml,1.62
+mostaza,S1,Mostaza 250 ml,250,ml,1.39
+mostaza,S2,Mostaza 250 ml,250,ml,1.36
+mostaza,S3,Mostaza 250 ml,250,ml,1.37
+cereales,S1,Cereales copos de maíz 500 g,500,g,2.53
+cereales,S2,Cereales copos de maíz 500 g,500,g,2.10
+cereales,S3,Cereales copos de maíz 500 g,500,g,2.29
+galletas,S1,Galletas María 800 g,800,g,2.01
+galletas,S2,Galletas María 800 g,800,g,1.90
+galletas,S3,Galletas María 800 g,800,g,2.07
+mermelada,S1,Mermelada de fresa 350 g,350,g,1.77
+mermelada,S2,Mermelada de fresa 350 g,350,g,1.64
+mermelada,S3,Mermelada de fresa 350 g,350,g,2.01
+miel,S1,Miel 500 g,500,g,3.67
+miel,S2,Miel 500 g,500,g,3.73
+miel,S3,Miel 500 g,500,g,3.15
+té,S1,Té negro 25 bolsitas,25,unidad,1.57
+té,S2,Té negro 25 bolsitas,25,unidad,1.71
+té,S3,Té negro 25 bolsitas,25,unidad,1.69
+agua,S1,Agua mineral 6x1 L,6000,ml,1.36
+agua,S2,Agua mineral 6x1 L,6000,ml,1.42
+agua,S3,Agua mineral 6x1 L,6000,ml,1.74
+zumo de naranja,S1,Zumo de naranja 1 L,1000,ml,1.62
+zumo de naranja,S2,Zumo de naranja 1 L,1000,ml,1.63
+zumo de naranja,S3,Zumo de naranja 1 L,1000,ml,1.75
+caldo de verduras,S1,Caldo de verduras 1 L,1000,ml,1.18
+caldo de verduras,S2,Caldo de verduras 1 L,1000,ml,1.15
+caldo de verduras,S3,Caldo de verduras 1 L,1000,ml,1.13
+cacao en polvo,S1,Cacao soluble 400 g,400,g,2.51
+cacao en polvo,S2,Cacao soluble 400 g,400,g,2.72
+cacao en polvo,S3,Cacao soluble 400 g,400,g,2.16
+tofu,S1,Tofu firme 400 g,400,g,2.24
+tofu,S2,Tofu firme 400 g,400,g,2.12
+tofu,S3,Tofu firme 400 g,400,g,2.00
+hummus,S1,Hummus 240 g,240,g,1.86
+hummus,S2,Hummus 240 g,240,g,1.69
+hummus,S3,Hummus 240 g,240,g,1.95
