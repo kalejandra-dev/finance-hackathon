@@ -1,4 +1,5 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
+import { api } from "../services/api.js";
 import { resultSummary, speak } from "../services/voice.js";
 
 const eur = (n) => (n == null ? "—" : `${n.toFixed(2).replace(".", ",")} €`);
@@ -43,7 +44,49 @@ function BudgetBar({ spent, budget }) {
   );
 }
 
-export default function Results({ result, autoVoice, onEdit }) {
+/** El ahorro solo cuenta en «Mi presupuesto» cuando el usuario confirma que ha hecho la compra. */
+function ConfirmPurchase({ resultId, confirmed, onConfirmed, onBudget, onNew }) {
+  const [saving, setSaving] = useState(false);
+  const [error, setError] = useState("");
+
+  async function confirm() {
+    setSaving(true);
+    setError("");
+    try {
+      await api.confirmPurchase(resultId);
+      onConfirmed(); // se recuerda en App: el botón no reaparece al volver a Resultados
+    } catch (e) {
+      setError(e.message);
+    } finally {
+      setSaving(false);
+    }
+  }
+
+  return (
+    <div className="card confirm" aria-live="polite">
+      {confirmed ? (
+        <>
+          <p className="ok">✓ Compra registrada en tu presupuesto.</p>
+          <p className="muted">Tu cesta se mantiene por si quieres repetirla. ¿Qué quieres hacer ahora?</p>
+          <div className="row">
+            <button className="btn primary" onClick={onBudget}>Ver mi presupuesto →</button>
+            <button className="btn" onClick={onNew}>🛒 Empezar una compra nueva</button>
+          </div>
+        </>
+      ) : (
+        <>
+          <p>¿Has hecho esta compra? Confírmala para sumar el gasto y el ahorro a tu historial.</p>
+          <button className="btn primary" onClick={confirm} disabled={saving || resultId == null}>
+            {saving ? "Guardando…" : "✅ He hecho esta compra"}
+          </button>
+        </>
+      )}
+      {error && <p role="alert" className="error">{error}</p>}
+    </div>
+  );
+}
+
+export default function Results({ result, autoVoice, onEdit, onBudget, onConfirmed, onNew }) {
   const { optimized, best_single_store: single, net_saving, budget, unavailable_items } = result;
   const summary = resultSummary(result);
 
@@ -90,6 +133,11 @@ export default function Results({ result, autoVoice, onEdit }) {
       ))}
 
       {unavailable_items?.length > 0 && <p className="error">No disponibles: {unavailable_items.join(", ")}</p>}
+
+      {optimized && (
+        <ConfirmPurchase resultId={result.id} confirmed={!!result.confirmed}
+          onConfirmed={onConfirmed} onBudget={onBudget} onNew={onNew} />
+      )}
 
       <button className="btn big" onClick={onEdit}>← Cambiar mi lista</button>
     </section>

@@ -12,10 +12,13 @@ const EXAMPLES = [
 
 const GREETING = "¡Hola! Soy OlivIA. Dime qué quieres cocinar o comprar, tu presupuesto y cuántos supermercados quieres visitar.";
 
-export default function Planner({ items, setItems, budget, setBudget, maxStores, setMaxStores, autoVoice, onDone }) {
+/** Chat inicial. El estado del chat vive en App para que no se pierda al cambiar de pantalla. */
+export const initialChat = () => [{ from: "olivia", text: GREETING }];
+
+export default function Planner({ items, setItems, budget, setBudget, maxStores, setMaxStores, autoVoice, onDone,
+  messages, setMessages }) {
   const [text, setText] = useState("");
   const [loading, setLoading] = useState(false);
-  const [messages, setMessages] = useState([{ from: "olivia", text: GREETING }]);
   const chatEnd = useRef(null);
 
   useEffect(() => { chatEnd.current?.scrollIntoView({ behavior: "smooth", block: "nearest" }); }, [messages, loading]);
@@ -28,11 +31,15 @@ export default function Planner({ items, setItems, budget, setBudget, maxStores,
   async function send(input) {
     const value = (input ?? text).replace(/^\p{Extended_Pictographic}\s*/u, "").trim();
     if (!value) return;
+    // Historial para la IA: sin el saludo inicial ni los mensajes de error
+    const history = messages.slice(1)
+      .filter((m) => !m.error)
+      .map((m) => ({ role: m.from === "user" ? "user" : "assistant", text: m.text }));
     setMessages((m) => [...m, { from: "user", text: value }]);
     setText("");
     setLoading(true);
     try {
-      const r = await api.interpret({ text: value, current_items: items, budget, max_stores: maxStores });
+      const r = await api.interpret({ text: value, history, current_items: items, budget, max_stores: maxStores });
       let reply = r.reply;
       if (r.not_in_catalog?.length) reply += ` (No tengo en el catálogo: ${r.not_in_catalog.join(", ")}.)`;
       say(reply);
@@ -40,7 +47,7 @@ export default function Planner({ items, setItems, budget, setBudget, maxStores,
       if (r.max_stores != null) setMaxStores(r.max_stores);
       if (r.items?.length) setItems(r.items);
     } catch (e) {
-      setMessages((m) => [...m, { from: "olivia", text: `Ha habido un problema: ${e.message}. Puedes intentarlo otra vez.` }]);
+      setMessages((m) => [...m, { from: "olivia", error: true, text: `Ha habido un problema: ${e.message}. Puedes intentarlo otra vez.` }]);
     } finally {
       setLoading(false);
     }

@@ -1,4 +1,4 @@
-export default function Home({ onStart }) {
+export default function Home({ onStart, onBudget }) {
   return (
     <section className="home" aria-labelledby="home-title">
       <h2 id="home-title" className="hero-title">Tu asistente para comprar mejor y ahorrar</h2>
@@ -8,6 +8,7 @@ export default function Home({ onStart }) {
       </p>
 
       <button className="btn primary big hero-cta" onClick={onStart}>🛒 Planificar mi compra</button>
+      <p><button className="btn" onClick={onBudget}>💶 Ver mi presupuesto</button></p>
 
       <ol className="features">
         <li className="card feature">

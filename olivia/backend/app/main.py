@@ -10,16 +10,20 @@ load_dotenv(ROOT / ".env")
 from fastapi import FastAPI  # noqa: E402
 from fastapi.middleware.cors import CORSMiddleware  # noqa: E402
 
+from app.api.purchases import router as purchases_router  # noqa: E402
 from app.api.routes import router  # noqa: E402
 from app.database.catalog import init_db  # noqa: E402
+from app.database.purchases import init_purchases  # noqa: E402
 
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
     init_db()
+    init_purchases()
     yield
 
 
 app = FastAPI(title="OlivIA API", version="0.1.0", lifespan=lifespan)
 app.add_middleware(CORSMiddleware, allow_origins=["http://localhost:5173"], allow_methods=["*"], allow_headers=["*"])
 app.include_router(router)
+app.include_router(purchases_router)

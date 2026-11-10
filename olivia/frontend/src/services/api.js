@@ -14,6 +14,10 @@ export const api = {
   interpret: async (body) => (await request("/ai/interpret", { method: "POST", body: JSON.stringify(body) })).json(),
   optimize: async (body) => (await request("/optimize", { method: "POST", body: JSON.stringify(body) })).json(),
   products: async () => (await request("/products")).json(),
+  confirmPurchase: async (resultId) =>
+    (await request("/purchases", { method: "POST", body: JSON.stringify({ result_id: resultId }) })).json(),
+  purchases: async () => (await request("/purchases")).json(),
+  deletePurchase: async (id) => { await request(`/purchases/${id}`, { method: "DELETE" }); },
   transcribe: async (blob, filename = "audio.webm") => {
     const form = new FormData();
     form.append("file", blob, filename);

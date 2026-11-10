@@ -1,8 +1,9 @@
 import { useEffect, useState } from "react";
 import Home from "./pages/Home.jsx";
-import Planner from "./pages/Planner.jsx";
+import Planner, { initialChat } from "./pages/Planner.jsx";
 import ShoppingList from "./pages/ShoppingList.jsx";
 import Results from "./pages/Results.jsx";
+import Budget from "./pages/Budget.jsx";
 import Settings from "./components/Settings.jsx";
 import { stopSpeaking } from "./services/voice.js";
 
@@ -10,6 +11,7 @@ const STEPS = [
   { id: "planner", label: "1. Planificar" },
   { id: "list", label: "2. Lista" },
   { id: "results", label: "3. Resultados" },
+  { id: "budget", label: "4. Mi presupuesto" },
 ];
 
 const DEFAULT_SETTINGS = { scale: 1, contrast: false, autoVoice: true };
@@ -28,6 +30,7 @@ export default function App() {
   const [budget, setBudget] = useState(35);
   const [maxStores, setMaxStores] = useState(2);
   const [result, setResult] = useState(null);
+  const [chat, setChat] = useState(initialChat); // se conserva al cambiar de pantalla
   const [settings, setSettings] = useState(loadSettings);
 
   useEffect(() => {
@@ -76,13 +79,14 @@ export default function App() {
       </header>
 
       <main id="main">
-        {step === "home" && <Home onStart={() => go("planner")} />}
+        {step === "home" && <Home onStart={() => go("planner")} onBudget={() => go("budget")} />}
         {step === "planner" && (
           <Planner
             items={items} setItems={setItems}
             budget={budget} setBudget={setBudget}
             maxStores={maxStores} setMaxStores={setMaxStores}
             autoVoice={settings.autoVoice}
+            messages={chat} setMessages={setChat}
             onDone={() => go("list")}
           />
         )}
@@ -95,8 +99,11 @@ export default function App() {
           />
         )}
         {step === "results" && result && (
-          <Results result={result} autoVoice={settings.autoVoice} onEdit={() => go("list")} />
+          <Results result={result} autoVoice={settings.autoVoice} onEdit={() => go("list")} onBudget={() => go("budget")}
+            onConfirmed={() => setResult((r) => ({ ...r, confirmed: true }))}
+            onNew={() => { setItems([]); setResult(null); setChat(initialChat()); go("planner"); }} />
         )}
+        {step === "budget" && <Budget result={result} onPlan={() => go("planner")} />}
       </main>
 
       <footer className="footer">Precios de demostración: datos de ejemplo, no son precios reales.</footer>
