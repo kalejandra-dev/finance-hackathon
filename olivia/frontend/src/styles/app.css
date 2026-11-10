@@ -34,7 +34,10 @@ button:focus-visible, input:focus-visible, select:focus-visible, a:focus-visible
 .msg.olivia { background: #eef2e3; }
 .msg.user { background: var(--olive); color: white; margin-left: auto; }
 .composer { display: flex; gap: .5rem; margin-top: .75rem; flex-wrap: wrap; }
-.composer input { flex: 1; min-width: 200px; min-height: 44px; padding: .5rem .75rem; border-radius: var(--radius); border: 2px solid #ccc; font-size: 1rem; }
+.composer { align-items: flex-end; }
+.composer textarea { flex: 1; min-width: 200px; min-height: 44px; max-height: 12rem; padding: .5rem .75rem; border-radius: var(--radius); border: 2px solid #ccc; font: inherit; font-size: 1rem; line-height: 1.4; resize: none; overflow-y: auto; }
+.composer textarea:focus-visible { outline: 3px solid #e0a800; outline-offset: 2px; }
+.msg { white-space: pre-wrap; overflow-wrap: anywhere; }
 .table { width: 100%; border-collapse: collapse; background: white; }
 .table th, .table td { padding: .5rem; border-bottom: 1px solid #e3e3e3; text-align: left; }
 .table input { width: 6rem; min-height: 40px; font-size: 1rem; }
