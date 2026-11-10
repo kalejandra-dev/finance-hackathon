@@ -20,8 +20,17 @@ export default function Planner({ items, setItems, budget, setBudget, maxStores,
   const [text, setText] = useState("");
   const [loading, setLoading] = useState(false);
   const chatEnd = useRef(null);
+  const textarea = useRef(null);
 
   useEffect(() => { chatEnd.current?.scrollIntoView({ behavior: "smooth", block: "nearest" }); }, [messages, loading]);
+
+  // El campo crece hacia abajo según el texto (hasta un máximo; luego hace scroll)
+  useEffect(() => {
+    const el = textarea.current;
+    if (!el) return;
+    el.style.height = "auto";
+    el.style.height = `${el.scrollHeight + 4}px`;
+  }, [text]);
 
   const say = (t) => {
     setMessages((m) => [...m, { from: "olivia", text: t }]);
@@ -82,8 +91,14 @@ export default function Planner({ items, setItems, budget, setBudget, maxStores,
 
       <form className="composer" onSubmit={(e) => { e.preventDefault(); send(); }}>
         <label htmlFor="request" className="sr-only">Tu petición</label>
-        <input id="request" value={text} onChange={(e) => setText(e.target.value)}
-          placeholder="Escribe aquí o pulsa Hablar…" disabled={loading} autoComplete="off" />
+        <textarea id="request" ref={textarea} rows={1} value={text} onChange={(e) => setText(e.target.value)}
+          onKeyDown={(e) => {
+            // Enter envía; Mayús+Enter hace salto de línea
+            if (e.key === "Enter" && !e.shiftKey && !e.nativeEvent.isComposing) { e.preventDefault(); send(); }
+          }}
+          placeholder="Escribe aquí o pulsa Hablar…" disabled={loading} autoComplete="off"
+          aria-describedby="request-hint" />
+        <span id="request-hint" className="sr-only">Pulsa Enter para enviar y Mayúsculas más Enter para cambiar de línea.</span>
         <button className="btn primary" type="submit" disabled={loading || !text.trim()}>Enviar</button>
         <VoiceButton onText={(t) => send(t)} disabled={loading} />
       </form>
