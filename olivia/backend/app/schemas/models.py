@@ -28,8 +28,15 @@ class AIResult(BaseModel):
     requires_clarification: bool = False
 
 
+class ChatTurn(BaseModel):
+    """Un mensaje anterior del chat (para que la IA entienda respuestas cortas como «4»)."""
+    role: Literal["user", "assistant"]
+    text: str = Field(..., min_length=1, max_length=2000)
+
+
 class InterpretRequest(BaseModel):
     text: str = Field(..., min_length=1)
+    history: list[ChatTurn] = []  # conversación previa, del más antiguo al más reciente
     current_items: list[ListItem] = []  # lista actual, para poder editarla por voz/texto
     budget: Optional[float] = None
     max_stores: Optional[int] = None
@@ -70,6 +77,32 @@ class Plan(BaseModel):
     total_cost: float
     stores: list[StoreSummary]
     assignments: list[Assignment]
+
+
+class PurchaseStore(BaseModel):
+    name: str
+    subtotal: float
+
+
+class Purchase(BaseModel):
+    """Compra confirmada por el usuario (resumen guardado en el historial)."""
+    id: int
+    result_id: int
+    confirmed_at: str  # UTC, formato SQLite «AAAA-MM-DD HH:MM:SS»
+    budget: Optional[float]
+    products_cost: float
+    travel_cost: float
+    total_cost: float
+    net_saving: Optional[float]
+    stores: list[PurchaseStore]
+    n_items: int
+
+
+class PurchaseHistory(BaseModel):
+    purchases: list[Purchase]
+    count: int
+    total_spent: float
+    total_saved: float
 
 
 class OptimizeResult(BaseModel):

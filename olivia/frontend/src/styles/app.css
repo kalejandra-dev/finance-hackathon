@@ -104,9 +104,37 @@ button:focus-visible, input:focus-visible, select:focus-visible, a:focus-visible
 .buy-list li { display: flex; justify-content: space-between; padding: .5rem 0; border-bottom: 1px solid #eee; gap: 1rem; }
 .subtotal { text-align: right; margin-bottom: 0; }
 
+/* ---------- Mi presupuesto ---------- */
+.stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 1rem; }
+.stat { display: flex; flex-direction: column; gap: .2rem; margin: 0; }
+.stat-label { color: var(--muted); font-size: .95rem; }
+.stat-value { font-size: 1.8rem; font-weight: 800; color: var(--text); }
+.stat-note { font-size: .85rem; }
+.hbars { list-style: none; padding: 0; margin: .5rem 0 0; }
+.hbar-row { display: grid; grid-template-columns: minmax(6rem, 9rem) 1fr auto; align-items: center; gap: .75rem; padding: .35rem 0; }
+.hbar-track { height: 14px; background: #e3e6da; border-radius: 4px; overflow: hidden; }
+.hbar-fill { display: block; height: 100%; background: var(--olive); border-radius: 0 4px 4px 0; }
+.hbar-value { font-variant-numeric: tabular-nums; font-weight: 600; }
+.chart { margin: 1.25rem 0; background: white; border: 1px solid #ddd; border-radius: var(--radius); padding: .75rem 1rem; }
+.chart svg { width: 100%; height: auto; display: block; overflow: visible; }
+.chart figcaption { font-size: .9rem; margin-top: .25rem; }
+.chart-grid { stroke: #e6e8df; stroke-width: 1; }
+.chart-axis { fill: var(--muted); font-size: 12px; }
+.chart-line { fill: none; stroke: var(--olive); stroke-width: 2; stroke-linejoin: round; }
+.chart-dot { fill: var(--olive); stroke: white; stroke-width: 2; }
+.chart-hit { fill: transparent; cursor: default; }
+.chart-label { fill: var(--text); font-size: 13px; font-weight: 700; }
+.history td { font-variant-numeric: tabular-nums; }
+.history .btn { min-height: 36px; padding: .2rem .6rem; }
+.confirm p { margin-top: 0; }
+.small-note { font-size: .9rem; margin-top: 1.5rem; }
+
 /* Alto contraste */
 .high-contrast { --olive: #000; --olive-dark: #000; --bg: #fff; --text: #000; --muted: #222; --danger: #b00000; }
 .high-contrast .header, .high-contrast .saving { background: #000; }
 .high-contrast .msg.olivia, .high-contrast .highlight { background: #fff; border: 2px solid #000; }
 .high-contrast .card, .high-contrast .chat { border: 2px solid #000; }
 .high-contrast .btn, .high-contrast .chip { border-width: 3px; }
+.high-contrast .hbar-track { background: #fff; border: 2px solid #000; }
+.high-contrast .chart { border: 2px solid #000; }
+.high-contrast .chart-grid { stroke: #888; }
