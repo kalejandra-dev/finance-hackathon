@@ -1,20 +1,26 @@
-/** Barra de accesibilidad: tamaño de texto, alto contraste y voz automática. */
+const SIZES = [1, 1.15, 1.3];
+
+/** Botones de accesibilidad de la cabecera: tamaño de texto, alto contraste y voz automática. */
 export default function Settings({ settings, setSettings }) {
   const set = (patch) => setSettings({ ...settings, ...patch });
-  const sizes = [1, 1.15, 1.3];
-  const idx = sizes.indexOf(settings.scale);
+  const idx = Math.max(0, SIZES.indexOf(settings.scale));
+  const nextSize = SIZES[(idx + 1) % SIZES.length];
+  const pct = Math.round(settings.scale * 100);
 
   return (
-    <div className="settings" role="group" aria-label="Accesibilidad">
-      <button className="chip" onClick={() => set({ scale: sizes[Math.max(0, idx - 1)] })}
-        disabled={idx <= 0} aria-label="Reducir tamaño del texto">A−</button>
-      <button className="chip" onClick={() => set({ scale: sizes[Math.min(sizes.length - 1, idx + 1)] })}
-        disabled={idx >= sizes.length - 1} aria-label="Aumentar tamaño del texto">A+</button>
-      <button className="chip" aria-pressed={settings.contrast} onClick={() => set({ contrast: !settings.contrast })}>
-        Alto contraste
+    <div className="header-tools">
+      <button className="header-settings" onClick={() => set({ scale: nextSize })}
+        aria-label={`Tamaño del texto: ${pct} %. Pulsa para cambiarlo`} title="Tamaño del texto">
+        <span className="a-icon" aria-hidden="true">A</span>
+        {pct > 100 && <span className="size-badge" aria-hidden="true">{pct}%</span>}
       </button>
-      <button className="chip" aria-pressed={settings.autoVoice} onClick={() => set({ autoVoice: !settings.autoVoice })}>
-        {settings.autoVoice ? "🔊 Voz activada" : "🔇 Voz desactivada"}
+      <button className="header-settings" aria-pressed={settings.contrast} onClick={() => set({ contrast: !settings.contrast })}
+        aria-label="Alto contraste" title="Alto contraste">
+        <span aria-hidden="true">◐</span>
+      </button>
+      <button className="header-settings" aria-pressed={settings.autoVoice} onClick={() => set({ autoVoice: !settings.autoVoice })}
+        aria-label={settings.autoVoice ? "Voz activada" : "Voz desactivada"} title="Leer respuestas en voz alta">
+        <span aria-hidden="true">{settings.autoVoice ? "🔊" : "🔇"}</span>
       </button>
     </div>
   );
