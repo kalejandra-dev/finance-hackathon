@@ -14,6 +14,7 @@ export const api = {
   interpret: async (body) => (await request("/ai/interpret", { method: "POST", body: JSON.stringify(body) })).json(),
   optimize: async (body) => (await request("/optimize", { method: "POST", body: JSON.stringify(body) })).json(),
   products: async () => (await request("/products")).json(),
+  supermarkets: async () => (await request("/supermarkets")).json(),
   demoLocation: async () => (await request("/location/demo")).json(),
   nearby: async ({ lat, lon }) => (await request(`/supermarkets/nearby?lat=${lat}&lon=${lon}`)).json(),
   geocode: async (q) => (await request(`/geocode?q=${encodeURIComponent(q)}`)).json(),
