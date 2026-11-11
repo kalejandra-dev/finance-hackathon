@@ -42,11 +42,23 @@ class InterpretRequest(BaseModel):
     max_stores: Optional[int] = None
 
 
+class Location(BaseModel):
+    lat: float = Field(..., ge=-90, le=90)
+    lon: float = Field(..., ge=-180, le=180)
+
+
 class OptimizeRequest(BaseModel):
     items: list[ListItem] = Field(..., min_length=1)
     max_stores: int = Field(2, ge=1, le=3)
     budget: Optional[float] = None
     include_travel: bool = True
+    supermarket_ids: Optional[list[str]] = None  # supers elegidos por el usuario (None = todos)
+    location: Optional[Location] = None  # ubicación del usuario (para distancias reales)
+
+
+class RouteRequest(BaseModel):
+    origin: Location
+    supermarket_ids: list[str] = Field(..., min_length=1, max_length=5)
 
 
 class Assignment(BaseModel):

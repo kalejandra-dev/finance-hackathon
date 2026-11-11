@@ -1,4 +1,6 @@
-supermarket_id,name,address,distance_km,travel_cost_eur
-S1,SuperAhorro,Calle Ejemplo 1,0.8,0.4
-S2,MercaBarrio,Avenida Demo 22,1.6,0.8
-S3,FrescoMarket,Plaza Prueba 5,2.9,1.45
+supermarket_id,name,address,lat,lon,description,distance_km,travel_cost_eur
+S1,SuperAhorro,"Avenida de la Universidad 12, Leganés",40.3349,-3.7622,"Supermercado de barrio, buen precio general",0.35,0.17
+S2,MercaBarrio,"Calle Juan Muñoz 20, Leganés",40.3281,-3.766,"Tienda pequeña de proximidad, algo más cara",0.51,0.26
+S3,FrescoMarket,"Avenida de Europa 8, Leganés",40.3392,-3.771,"Gourmet: más caro, todo el surtido",0.89,0.45
+S4,DescuentoPlus,"Avenida de Fuenlabrada 40, Leganés",40.3265,-3.7745,"Discount: el más barato, pero le faltan productos",1.05,0.53
+S5,HiperOliva,"Avenida Rey Juan Carlos I 100, Leganés",40.3205,-3.756,"Hipermercado grande, barato pero más lejos",1.55,0.78

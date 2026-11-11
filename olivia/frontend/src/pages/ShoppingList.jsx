@@ -1,7 +1,9 @@
 import { useEffect, useState } from "react";
 import { api } from "../services/api.js";
+import LocationPicker from "../components/LocationPicker.jsx";
 
-export default function ShoppingList({ items, setItems, budget, setBudget, maxStores, setMaxStores, onOptimized }) {
+export default function ShoppingList({ items, setItems, budget, setBudget, maxStores, setMaxStores, onOptimized,
+  location, setLocation, selectedStores, setSelectedStores }) {
   const [catalog, setCatalog] = useState({});
   const [newItem, setNewItem] = useState("");
   const [loading, setLoading] = useState(false);
@@ -23,7 +25,12 @@ export default function ShoppingList({ items, setItems, budget, setBudget, maxSt
     setLoading(true);
     setError("");
     try {
-      onOptimized(await api.optimize({ items, max_stores: maxStores, budget }));
+      onOptimized(await api.optimize({
+        items, budget,
+        max_stores: Math.min(maxStores, selectedStores.length),
+        supermarket_ids: selectedStores,
+        location: { lat: location.lat, lon: location.lon },
+      }));
     } catch (e) {
       setError(e.message);
     } finally {
@@ -66,12 +73,17 @@ export default function ShoppingList({ items, setItems, budget, setBudget, maxSt
         <input id="budget" type="number" min="0" value={budget ?? ""} onChange={(e) => setBudget(e.target.value === "" ? null : Number(e.target.value))} />
         <label htmlFor="stores">Máx. supermercados</label>
         <select id="stores" value={maxStores} onChange={(e) => setMaxStores(Number(e.target.value))}>
-          {[1, 2, 3].map((n) => <option key={n} value={n}>{n}</option>)}
+          {[1, 2, 3].filter((n) => n <= Math.max(1, selectedStores.length)).map((n) => <option key={n} value={n}>{n}</option>)}
         </select>
       </div>
 
+      <LocationPicker location={location} setLocation={setLocation}
+        selected={selectedStores} setSelected={setSelectedStores} />
+
       {error && <p role="alert" className="error">{error}</p>}
-      <button className="btn primary big" onClick={optimize} disabled={loading || !items.length}>
+      {!location && <p className="muted">Indica dónde estás para comparar tus supermercados cercanos.</p>}
+      <button className="btn primary big" onClick={optimize}
+        disabled={loading || !items.length || !location || !selectedStores.length}>
         {loading ? "Optimizando…" : "Optimizar mi compra"}
       </button>
     </section>
