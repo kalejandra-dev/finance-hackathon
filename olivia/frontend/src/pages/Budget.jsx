@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { api } from "../services/api.js";
+import PageHeading from "../components/PageHeading.jsx";
 
 const eur = (n) => (n == null ? "—" : `${n.toFixed(2).replace(".", ",")} €`);
 
@@ -84,7 +85,8 @@ function CurrentPurchase({ result }) {
   const { optimized, budget, net_saving, remaining_budget } = result;
   return (
     <section className="card" aria-labelledby="current-title">
-      <h3 id="current-title">Tu última compra optimizada <small className="muted">(estimación)</small></h3>
+      <span className="small-label">ESTIMACIÓN</span>
+      <h2 id="current-title">Tu última compra optimizada</h2>
       <dl className="kv">
         <dt>Presupuesto</dt><dd>{eur(budget)}</dd>
         <dt>Coste estimado</dt><dd><strong>{eur(optimized.total_cost)}</strong></dd>
@@ -96,7 +98,7 @@ function CurrentPurchase({ result }) {
             <dd className={remaining_budget >= 0 ? "ok" : "error"}>{eur(Math.abs(remaining_budget))}</dd></>
         )}
       </dl>
-      <h4>¿Dónde va tu dinero?</h4>
+      <h3>¿Dónde va tu dinero?</h3>
       <StoreBars stores={optimized.stores} />
     </section>
   );
@@ -120,18 +122,21 @@ export default function Budget({ result, onPlan }) {
   }
 
   return (
-    <section aria-labelledby="budget-title">
-      <h2 id="budget-title">Mi presupuesto</h2>
+    <section className="content-page" aria-labelledby="budget-title">
+      <PageHeading id="budget-title" eyebrow="BIENESTAR FINANCIERO" title="Cuida tu" em="presupuesto."
+        desc="Tu última compra estimada y el historial de las compras que has confirmado."
+        right={<button className="btn" onClick={onPlan}>✧ Nueva planificación</button>} />
 
       {result?.optimized && <CurrentPurchase result={result} />}
 
-      <h3 className="section-title">Tu historial</h3>
+      <h2 className="section-title">Tu historial</h2>
       {error && <p role="alert" className="error">No se pudo cargar el historial: {error}</p>}
       {!history && !error && <p className="muted" role="status">Cargando…</p>}
 
       {history && history.count === 0 && (
-        <div className="card">
-          <p>Todavía no has confirmado ninguna compra.</p>
+        <div className="card history-empty">
+          <span aria-hidden="true">🧾</span>
+          <p><strong>Todavía no has confirmado ninguna compra.</strong></p>
           <p className="muted">
             Después de optimizar tu compra, pulsa <strong>«He hecho esta compra»</strong> en la pantalla de resultados
             y aparecerá aquí. Solo contamos el ahorro de las compras que confirmas.

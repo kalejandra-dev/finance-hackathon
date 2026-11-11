@@ -2,12 +2,14 @@ import { useEffect, useRef, useState } from "react";
 import { api } from "../services/api.js";
 import { speak } from "../services/voice.js";
 import VoiceButton from "../components/VoiceButton.jsx";
+import Logo from "../components/Logo.jsx";
+import PageHeading from "../components/PageHeading.jsx";
 
 const EXAMPLES = [
-  "🥘 Paella para 4 personas, 35 €, máximo 2 supermercados",
-  "🍝 Pasta carbonara para 2",
-  "🍲 Lentejas para 3 personas con 10 €",
-  "🛒 Leche, huevos, pan y café",
+  ["🥘", "Paella para 4 personas, 35 €, máximo 2 supermercados"],
+  ["🍝", "Pasta carbonara para 2"],
+  ["🍲", "Lentejas para 3 personas con 10 €"],
+  ["🛒", "Leche, huevos, pan y café"],
 ];
 
 const GREETING = "¡Hola! Soy OlivIA. Dime qué quieres cocinar o comprar, tu presupuesto y cuántos supermercados quieres visitar.";
@@ -16,7 +18,7 @@ const GREETING = "¡Hola! Soy OlivIA. Dime qué quieres cocinar o comprar, tu pr
 export const initialChat = () => [{ from: "olivia", text: GREETING }];
 
 export default function Planner({ items, setItems, budget, setBudget, maxStores, setMaxStores, autoVoice, onDone,
-  messages, setMessages }) {
+  onManual, messages, setMessages }) {
   const [text, setText] = useState("");
   const [loading, setLoading] = useState(false);
   const chatEnd = useRef(null);
@@ -63,29 +65,38 @@ export default function Planner({ items, setItems, budget, setBudget, maxStores,
   }
 
   return (
-    <section aria-labelledby="planner-title">
-      <h2 id="planner-title">¿Qué necesitas comprar?</h2>
+    <section className="content-page" aria-labelledby="planner-title">
+      <PageHeading id="planner-title" eyebrow="PASO 01 — PLANIFICA" title="¿Qué compramos" em="hoy?"
+        desc="Cuéntale a OlivIA qué necesitas: una receta, una lista o tu presupuesto. Por texto o por voz."
+        right={<span className="subtle-tag">✧ Asistente con IA</span>} />
 
-      {messages.length === 1 && (
-        <div className="examples">
-          <p className="muted">Prueba con un ejemplo:</p>
-          {EXAMPLES.map((ex) => (
-            <button key={ex} className="chip example" onClick={() => send(ex)} disabled={loading}>{ex}</button>
-          ))}
-        </div>
-      )}
+      <div className="planner-layout">
+      <div className="surface planner-card">
+      <div className="card-top">
+        <span className="field-icon" aria-hidden="true"><Logo size={28} /></span>
+        <div><h2>Habla con OlivIA</h2><p>Tu asistente de compras</p></div>
+        <span className="ai-tag">IA + VOZ</span>
+      </div>
 
       <div className="chat" role="log" aria-live="polite">
         {messages.map((m, i) => (
-          <div key={i} className={`msg ${m.from}`}>
-            <span className="sr-only">{m.from === "olivia" ? "OlivIA dice:" : "Tú:"}</span>
-            {m.text}
-            {m.from === "olivia" && (
-              <button className="link" onClick={() => speak(m.text)} aria-label="Escuchar este mensaje">🔊</button>
-            )}
+          <div key={i} className={`msg-row ${m.from}`}>
+            {m.from === "olivia" && <span className="avatar" aria-hidden="true"><Logo size={22} /></span>}
+            <div className={`msg ${m.from}`}>
+              <span className="sr-only">{m.from === "olivia" ? "OlivIA dice:" : "Tú:"}</span>
+              {m.text}
+              {m.from === "olivia" && (
+                <button className="link" onClick={() => speak(m.text)} aria-label="Escuchar este mensaje">🔊</button>
+              )}
+            </div>
           </div>
         ))}
-        {loading && <div className="msg olivia typing" aria-label="OlivIA está pensando"><span /><span /><span /></div>}
+        {loading && (
+          <div className="msg-row olivia">
+            <span className="avatar" aria-hidden="true"><Logo size={22} /></span>
+            <div className="msg olivia typing" aria-label="OlivIA está pensando"><span /><span /><span /></div>
+          </div>
+        )}
         <div ref={chatEnd} />
       </div>
 
@@ -104,15 +115,43 @@ export default function Planner({ items, setItems, budget, setBudget, maxStores,
       </form>
 
       {items.length > 0 && (
-        <div className="card summary-strip">
+        <div className="inline-feedback">
           <p>
-            <strong>{items.length} productos</strong> en tu lista
+            ✓ <strong>{items.length} productos</strong> en tu lista
             {budget != null && <> · Presupuesto <strong>{budget} €</strong></>}
             {" "}· Máx. <strong>{maxStores}</strong> {maxStores === 1 ? "supermercado" : "supermercados"}
           </p>
-          <button className="btn primary big" onClick={onDone}>Revisar mi lista →</button>
+          <button className="btn primary" onClick={onDone}>Revisar mi lista →</button>
         </div>
       )}
+      <p className="planner-footnote">✓ Siempre puedes editar los productos antes de comparar.</p>
+      </div>
+
+      <aside className="planner-side">
+        <div className="surface inspiration-card">
+          <span className="small-label">¿NO SABES QUÉ PEDIR?</span>
+          <h2>Empieza por una idea ✨</h2>
+          <p>Prueba una de estas sugerencias.</p>
+          <div className="sample-list">
+            {EXAMPLES.map(([emoji, ex]) => (
+              <button key={ex} onClick={() => send(ex)} disabled={loading}>
+                <span className="sample-emoji" aria-hidden="true">{emoji}</span>
+                <span>{ex}</span>
+                <span aria-hidden="true">↗</span>
+              </button>
+            ))}
+          </div>
+        </div>
+        <div className="quick-cart">
+          <div className="quick-cart-symbol" aria-hidden="true">🧺</div>
+          <div>
+            <h2>¿Prefieres hacerlo tú?</h2>
+            <p>Añade productos uno a uno, sin usar IA.</p>
+            <button className="text-link" onClick={onManual}>Crear lista manual →</button>
+          </div>
+        </div>
+      </aside>
+      </div>
     </section>
   );
 }
