@@ -10,7 +10,8 @@ from io import BytesIO
 from elevenlabs import ElevenLabs
 
 STT_MODEL = os.getenv("ELEVENLABS_STT_MODEL", "scribe_v2")
-TTS_MODEL = os.getenv("ELEVENLABS_TTS_MODEL", "eleven_v4")
+# eleven_flash_v2_5: el modelo de menor latencia de ElevenLabs (~75 ms), en español
+TTS_MODEL = os.getenv("ELEVENLABS_TTS_MODEL", "eleven_flash_v2_5")
 # Voz por defecto: Sarah (multilingüe). Cambiadla en .env con ELEVENLABS_VOICE_ID.
 VOICE_ID = os.getenv("ELEVENLABS_VOICE_ID") or "EXAVITQu4vr4xnSDxMaL"
 LANGUAGE = "es"

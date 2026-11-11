@@ -11,7 +11,7 @@ from typing import Optional
 
 import httpx
 
-from app.database.catalog import get_supermarkets
+from app.database.catalog import get_catalog, get_supermarkets
 
 # Ubicación de demo: Campus UC3M de Leganés (aprox.)
 DEMO_LOCATION = {"lat": 40.3326, "lon": -3.7651, "label": "Campus UC3M Leganés (demo)"}
@@ -39,13 +39,40 @@ def travel_cost(distance_km: float) -> float:
     return round(distance_km * ROUTE_FACTOR * 2 * EUR_PER_KM, 2)
 
 
+def price_index() -> dict[str, float]:
+    """Índice de precio de cada súper: media de (su precio / precio más barato) en los productos
+    que vende. 1.00 = siempre el más barato; 1.20 = un 20 % más caro de media."""
+    ratios: dict[str, list[float]] = {}
+    for offers in get_catalog().values():
+        cheapest = min(o["price_eur"] for o in offers.values())
+        for sid, o in offers.items():
+            ratios.setdefault(sid, []).append(o["price_eur"] / cheapest)
+    return {sid: round(sum(r) / len(r), 3) for sid, r in ratios.items()}
+
+
+def _price_level(index: float, lo: float, hi: float) -> int:
+    """1 = €, 2 = €€, 3 = €€€ (relativo a los súpers de la demo)."""
+    if hi - lo < 1e-9:
+        return 2
+    t = (index - lo) / (hi - lo)
+    return 1 if t < 1 / 3 else 2 if t < 2 / 3 else 3
+
+
 def nearby_supermarkets(lat: float, lon: float, limit: int = 5) -> list[dict]:
-    """Supermercados ordenados del más cercano al más lejano, con distancia y coste."""
+    """Supermercados ordenados del más cercano al más lejano, con distancia, coste,
+    nivel de precio y cuántos productos del catálogo tiene."""
+    idx = price_index()
+    lo, hi = min(idx.values()), max(idx.values())
+    catalog = get_catalog()
     stores = []
     for s in get_supermarkets().values():
+        sid = s["supermarket_id"]
         d = round(haversine_km((lat, lon), (s["lat"], s["lon"])), 2)
         stores.append({**s, "distance_km": d, "travel_cost_eur": travel_cost(d),
-                       "walk_minutes": round(d * ROUTE_FACTOR / WALK_KMH * 60)})
+                       "walk_minutes": round(d * ROUTE_FACTOR / WALK_KMH * 60),
+                       "price_index": idx.get(sid), "price_level": _price_level(idx.get(sid, hi), lo, hi),
+                       "catalog_coverage": round(sum(sid in o for o in catalog.values()) / len(catalog), 2),
+                       "cheapest": idx.get(sid) == lo})
     return sorted(stores, key=lambda s: s["distance_km"])[:limit]
 
 

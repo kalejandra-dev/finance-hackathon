@@ -1,26 +1,83 @@
 import { api } from "./api.js";
 
-// Un único reproductor: si OlivIA empieza a hablar, se corta lo anterior.
-let current = null;
+/*
+ * Voz de OlivIA: un único reproductor para toda la app.
+ * - stopSpeaking() corta lo que suena Y cancela lo que se está generando (token),
+ *   para que un audio que llega tarde no empiece a sonar después de pulsar «parar».
+ * - prepareSpeech() genera el audio antes de enseñar el texto, así texto y voz salen a la vez.
+ */
+let current = null; // Audio que está sonando
+let currentText = null; // texto que está sonando (para el botón play/stop)
+let token = 0; // cada stop o nueva petición invalida las anteriores
+const listeners = new Set();
 
-export async function speak(text) {
-  try {
-    if (current) {
-      current.pause();
-      current = null;
-    }
-    const url = await api.speak(text);
-    current = new Audio(url);
-    await current.play();
-  } catch {
-    /* si la voz falla, el texto sigue en pantalla: la app nunca depende de la voz */
-  }
+const notify = () => listeners.forEach((fn) => fn(currentText));
+
+/** Suscribirse a cambios (devuelve la función para desuscribirse). Recibe el texto que suena o null. */
+export function onSpeakingChange(fn) {
+  listeners.add(fn);
+  return () => listeners.delete(fn);
 }
 
 export function stopSpeaking() {
-  if (current) current.pause();
+  token++;
+  if (current) {
+    current.pause();
+    current.removeAttribute("src");
+  }
   current = null;
+  currentText = null;
+  notify();
 }
+
+function play(audio, text) {
+  if (current && current !== audio) current.pause();
+  current = audio;
+  currentText = text;
+  audio.onended = () => {
+    if (current === audio) {
+      current = null;
+      currentText = null;
+      notify();
+    }
+  };
+  audio.play().catch(() => {});
+  notify();
+}
+
+/**
+ * Genera el audio y devuelve una función para reproducirlo (o null si falla o se ha cancelado).
+ * Espera como mucho `timeoutMs`; si tarda más, devuelve null y el texto se enseña sin voz.
+ */
+export async function prepareSpeech(text, timeoutMs = 3000) {
+  const my = ++token;
+  if (current) current.pause();
+  try {
+    const url = await Promise.race([
+      api.speak(text),
+      new Promise((_, reject) => setTimeout(() => reject(new Error("timeout")), timeoutMs)),
+    ]);
+    if (my !== token) return null; // alguien pulsó parar o pidió otro audio
+    const audio = new Audio(url);
+    return () => { if (my === token) play(audio, text); };
+  } catch {
+    return null; // si la voz falla, el texto sigue en pantalla: la app nunca depende de la voz
+  }
+}
+
+/** Habla ya (sin esperar a sincronizar con texto). */
+export async function speak(text) {
+  const start = await prepareSpeech(text, 15000);
+  if (start) start();
+}
+
+/** Para el botón 🔊 de cada mensaje: si ese texto está sonando, lo para; si no, lo lee. */
+export function toggleSpeak(text) {
+  if (currentText === text) stopSpeaking();
+  else speak(text);
+}
+
+export const isSpeaking = (text) => currentText === text;
 
 const eurosToWords = (n) => `${n.toFixed(2).replace(".", ",")} euros`;
 

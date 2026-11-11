@@ -68,3 +68,11 @@ def test_route_falls_back_to_estimate_without_internet(client):
 def test_geocode_error_is_friendly(client):
     r = client.get("/api/geocode", params={"q": "Calle Falsa 123"})
     assert r.status_code == 502
+
+
+def test_nearby_includes_price_level_and_one_cheapest(client):
+    stores = client.get("/api/supermarkets/nearby", params=CAMPUS).json()
+    assert all(s["price_level"] in (1, 2, 3) for s in stores)
+    assert sum(s["cheapest"] for s in stores) == 1
+    cheapest = next(s for s in stores if s["cheapest"])
+    assert cheapest["price_index"] == min(s["price_index"] for s in stores)
