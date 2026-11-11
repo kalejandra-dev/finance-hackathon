@@ -78,6 +78,12 @@ h1, h2, h3, h4 { font-family: var(--display); color: var(--ink); line-height: 1.
 .header-settings:hover { background: #eaf3eb; color: var(--green); }
 .header-settings[aria-pressed="true"] { background: #eaf4e9; color: var(--green); }
 .a-icon { font-weight: 800; font-family: Georgia, serif; font-size: 1.3rem; }
+.text-size { display: inline-flex; align-items: center; gap: 2px; border-radius: 10px; }
+.text-size .header-settings { width: 34px; font-family: Georgia, serif; font-weight: 800; }
+.text-size .header-settings:disabled { opacity: .35; cursor: not-allowed; }
+.size-reset { min-width: 48px; height: 28px; border: 0; border-radius: 8px; background: transparent; color: #6c7d71; font-weight: 800; font-size: .75rem; }
+.size-reset.zoomed { background: var(--green); color: white; }
+.size-reset:not(:disabled):hover { text-decoration: underline; }
 .size-badge { position: absolute; bottom: 1px; right: -2px; font-size: .58rem; font-weight: 800; background: var(--green); color: white; border-radius: 6px; padding: 0 3px; }
 .header-cta { display: flex; align-items: center; gap: 9px; background: var(--green-700); color: white; font-weight: 800; font-size: .88rem; border: 0; padding: 12px 18px; border-radius: 11px; transition: transform .15s, background .15s; }
 .header-cta:hover { background: var(--green-800); transform: translateY(-1px); }
@@ -426,22 +432,59 @@ span.buy-item { cursor: default; }
 .pin.stop-pin { background: var(--green); color: white; }
 .pin.home { background: white; font-size: 1.1rem; }
 
-/* ---------- 11. Alto contraste ---------- */
-.high-contrast { --ink: #000; --text: #000; --muted: #222; --green: #045c32; --green-600: #045c32; --green-700: #045c32; --green-800: #023d21;
-  --accent: #045c32; --border: #000; --bg: #fff; --soft: #fff; --soft-2: #fff; --shadow: none; --shadow-sm: none; --focus: #000; }
-.high-contrast .surface, .high-contrast .card, .high-contrast .metric-card, .high-contrast .chat, .high-contrast .composer,
-.high-contrast .store-option, .high-contrast .qty, .high-contrast .table, .high-contrast .sample-list button, .high-contrast .quick-cart { border: 2px solid #000; }
-.high-contrast .nav-links > button, .high-contrast .section-heading p, .high-contrast .hero-copy > p, .high-contrast .benefit-text, .high-contrast .stats-row dd > span, .high-contrast .footer-col,
-.high-contrast .panel-top p, .high-contrast .disclaimer-line, .high-contrast .footer-bottom, .high-contrast .cta-note { color: #000 !important; }
-.high-contrast .nav-links > button.active { background: #000; color: #fff; }
-.high-contrast .result-feature, .high-contrast .result-feature-right, .high-contrast .home-bottom { background: #000; }
-.high-contrast .result-feature-left p, .high-contrast .sub-feature, .high-contrast .result-feature-right > span,
-.high-contrast .result-feature-right > small, .high-contrast .green-label { color: #fff; }
-.high-contrast .msg.olivia { border: 2px solid #000; color: #000; }
-.high-contrast .btn { border: 2px solid #000; }
-.high-contrast .btn.primary { background: #000; color: #fff; }
-.high-contrast .hint { color: #000 !important; text-decoration: underline; }
-.high-contrast .art-halo { display: none; }
+/* Nivel de precio y etiquetas de cada súper */
+.store-tags { display: flex; flex-wrap: wrap; gap: 6px; align-items: center; margin-top: 6px; }
+.price-level { font-weight: 800; color: var(--green); letter-spacing: 1px; }
+.price-level-off { color: #c3cbc4; }
+.store-tag { font-size: .75rem; font-weight: 700; padding: 2px 8px; border-radius: 99px; background: var(--green); color: #fff; }
+.store-tag.soft { background: var(--soft); color: var(--muted); border: 1px solid var(--border); }
+.high-contrast .price-level-off { color: #777 !important; }
+
+/* ---------- 11. Alto contraste (modo oscuro: negro, blanco y verde claro) ----------
+   Fondo negro, texto blanco y VERDE CLARO (#9ee6a8, contraste 14:1 sobre negro) para todo lo
+   que se puede pulsar o está activo. Primero se «resetea» todo con :where() (especificidad
+   mínima) y después se resaltan los elementos interactivos. El mapa y las imágenes no se tocan. */
+.high-contrast {
+  --ink: #fff; --text: #fff; --muted: #fff; --green: #9ee6a8; --green-600: #9ee6a8; --green-700: #9ee6a8;
+  --green-800: #9ee6a8; --dark: #000; --accent: #9ee6a8; --soft: #000; --soft-2: #000; --border: #fff;
+  --bg: #000; --white: #000; --danger: #ff8a80; --warn-bg: #000; --warn-ink: #9ee6a8;
+  --shadow: none; --shadow-sm: none; --focus: #9ee6a8;
+  color-scheme: dark; background: #000; color: #fff;
+}
+.high-contrast body { background: #000; color: #fff; }
+
+/* 1) Todo negro y blanco (salvo mapa, imágenes y SVG) */
+.high-contrast :where(body *:not(.leaflet-container, .leaflet-container *, img, svg, svg *, .pin, .pin *)) {
+  background-color: #000 !important; background-image: none !important; color: #fff !important;
+  border-color: #fff !important; box-shadow: none !important; text-shadow: none !important;
+}
+/* 2) Bordes visibles en todo lo que es una caja o un control */
+.high-contrast :where(button, input, select, textarea, .card, .surface, .metric-card, .chat, .composer, .store-option,
+  .qty, .table, .quick-cart, .benefit, .idea-chip, .sample-list button, .msg, .result-feature) {
+  border: 2px solid #fff !important;
+}
+.high-contrast :where(.nav-links > button, .header-settings, .menu-toggle) { border-color: transparent !important; }
+.high-contrast input::placeholder, .high-contrast textarea::placeholder { color: #d0d0d0 !important; opacity: 1; }
+
+/* 3) Amarillo = interactivo / activo / importante */
+.high-contrast .btn.primary, .high-contrast .header-cta, .high-contrast .msg.user,
+.high-contrast .nav-links > button.active, .high-contrast .header-settings[aria-pressed="true"],
+.high-contrast .size-badge, .high-contrast .nav-count, .high-contrast .store-option.checked,
+.high-contrast .bar-fill, .high-contrast .hbar-fill, .high-contrast .size-reset.zoomed {
+  background-color: #9ee6a8 !important; color: #000 !important; border-color: #9ee6a8 !important;
+}
+.high-contrast .btn.primary *, .high-contrast .header-cta *, .high-contrast .msg.user *,
+.high-contrast .nav-links > button.active *, .high-contrast .header-settings[aria-pressed="true"] *,
+.high-contrast .store-option.checked * { color: #000 !important; background-color: transparent !important; }
+.high-contrast a, .high-contrast .hint, .high-contrast .link { color: #9ee6a8 !important; text-decoration: underline; }
+.high-contrast .btn:not(.primary):hover:not(:disabled), .high-contrast .nav-links > button:hover:not(:disabled):not(.active),
+.high-contrast .header-settings:hover { background-color: #333 !important; }
+.high-contrast .error, .high-contrast [role="alert"] { color: #ff8a80 !important; }
+.high-contrast .ok, .high-contrast .green-label, .high-contrast .saving-amount { color: #9ee6a8 !important; }
+.high-contrast :focus-visible { outline: 4px solid #9ee6a8 !important; outline-offset: 3px; }
+.high-contrast button:disabled { opacity: .55; }
+.high-contrast .art-halo, .high-contrast .demo-pulse { display: none !important; }
+.high-contrast .leaflet-container { border: 2px solid #fff; filter: contrast(1.1); }
 
 /* ---------- 12. Responsive y movimiento reducido ---------- */
 @media (max-width: 1080px) {
@@ -511,11 +554,24 @@ span.buy-item { cursor: default; }
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { scroll-behavior: auto !important; transition: none !important; animation: none !important; }
 }
-.high-contrast .benefit, .high-contrast .idea-chip { border: 2px solid #000; }
-.high-contrast .footer-col button { color: #000; }
 @media (prefers-reduced-motion: reduce) {
   .ideas-marquee { mask-image: none; -webkit-mask-image: none; }
   .marquee-track { width: auto; }
   .marquee-group { flex-wrap: wrap; justify-content: center; }
   .marquee-group[aria-hidden] { display: none; }
 }
+
+/* ---------- 13. Texto ampliado: la cabecera se adapta ---------- */
+.header-cta, .text-size, .nav-links > button { white-space: nowrap; }
+html.zoom-md .nav-icon { display: none; }
+html.zoom-md .nav-links > button { padding: 10px 8px; }
+html.zoom-md .header-inner { gap: 12px; }
+html.zoom-lg .site-header { height: auto; min-height: 76px; }
+html.zoom-lg .header-inner { padding-top: 8px; padding-bottom: 8px; position: relative; }
+html.zoom-lg .nav-links { display: none; position: absolute; left: 0; top: 100%; right: 0; margin: 0; background: white; border-top: 1px solid #e6eee7;
+  padding: 12px 18px; flex-direction: column; align-items: stretch; box-shadow: 0 20px 35px rgba(24, 63, 45, .08); }
+html.zoom-lg .nav-links.open { display: flex; }
+html.zoom-lg .nav-links > button { width: 100%; padding: 14px 12px; }
+html.zoom-lg .nav-icon { display: inline; }
+html.zoom-lg .header-cta { display: none; }
+html.zoom-lg .menu-toggle { display: flex; align-items: center; justify-content: center; }

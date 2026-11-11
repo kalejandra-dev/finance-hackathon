@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import { api } from "../services/api.js";
-import { speak } from "../services/voice.js";
+import { onSpeakingChange, prepareSpeech, toggleSpeak } from "../services/voice.js";
 import VoiceButton from "../components/VoiceButton.jsx";
 import Logo from "../components/Logo.jsx";
 import PageHeading from "../components/PageHeading.jsx";
@@ -44,9 +44,15 @@ export default function Planner({ items, setItems, budget, setBudget, maxStores,
     }
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
-  const say = (t) => {
+  const [speakingText, setSpeakingText] = useState(null);
+  useEffect(() => onSpeakingChange(setSpeakingText), []);
+
+  // Con voz activada, primero se prepara el audio y luego se enseñan texto y voz a la vez
+  // (máximo 3 s de espera: si la voz tarda más, se enseña el texto sin voz).
+  const say = async (t) => {
+    const start = autoVoice ? await prepareSpeech(t) : null;
     setMessages((m) => [...m, { from: "olivia", text: t }]);
-    if (autoVoice) speak(t);
+    start?.();
   };
 
   async function send(input) {
@@ -63,7 +69,7 @@ export default function Planner({ items, setItems, budget, setBudget, maxStores,
       const r = await api.interpret({ text: value, history, current_items: items, budget, max_stores: maxStores });
       let reply = r.reply;
       if (r.not_in_catalog?.length) reply += ` (No tengo en el catálogo: ${r.not_in_catalog.join(", ")}.)`;
-      say(reply);
+      await say(reply);
       if (r.budget != null) setBudget(r.budget);
       if (r.max_stores != null) setMaxStores(r.max_stores);
       if (r.items?.length) setItems(r.items);
@@ -96,7 +102,10 @@ export default function Planner({ items, setItems, budget, setBudget, maxStores,
               <span className="sr-only">{m.from === "olivia" ? "OlivIA dice:" : "Tú:"}</span>
               {m.text}
               {m.from === "olivia" && (
-                <button className="link" onClick={() => speak(m.text)} aria-label="Escuchar este mensaje">🔊</button>
+                <button className="link" onClick={() => toggleSpeak(m.text)}
+                  aria-label={speakingText === m.text ? "Parar la lectura" : "Escuchar este mensaje"}>
+                  {speakingText === m.text ? "⏹" : "🔊"}
+                </button>
               )}
             </div>
           </div>

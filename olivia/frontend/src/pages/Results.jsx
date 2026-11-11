@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { api } from "../services/api.js";
-import { resultSummary, speak } from "../services/voice.js";
+import { onSpeakingChange, resultSummary, speak, toggleSpeak } from "../services/voice.js";
 import RouteMap from "../components/RouteMap.jsx";
 import PageHeading from "../components/PageHeading.jsx";
 
@@ -105,6 +105,8 @@ export default function Results({ result, location, autoVoice, onEdit, onBudget,
   const [got, setGot] = useState({}); // productos ya cogidos en la tienda
   const toggleGot = (key) => setGot((g) => ({ ...g, [key]: !g[key] }));
 
+  const [speakingText, setSpeakingText] = useState(null);
+  useEffect(() => onSpeakingChange(setSpeakingText), []);
   useEffect(() => { if (autoVoice) speak(summary); }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   const shown = tab === "single" && single ? single : optimized;
@@ -142,7 +144,9 @@ export default function Results({ result, location, autoVoice, onEdit, onBudget,
               <span className="sub-feature">
                 {optimized.stores.map((s) => s.name).join(" + ")} · productos + desplazamiento
               </span>
-              <button className="btn light listen" onClick={() => speak(summary)}>🔊 Escuchar resumen</button>
+              <button className="btn light listen" onClick={() => toggleSpeak(summary)}>
+                {speakingText === summary ? "⏹ Parar lectura" : "🔊 Escuchar resumen"}
+              </button>
             </div>
             <div className="result-feature-right">
               <div className="result-illustration" aria-hidden="true">↘</div>

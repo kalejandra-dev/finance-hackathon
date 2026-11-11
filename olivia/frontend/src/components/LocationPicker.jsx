@@ -3,6 +3,15 @@ import { api } from "../services/api.js";
 
 const MAX_SELECTED = 3;
 
+/** Preselección: el súper más cercano + el más barato (si no es el mismo, añadimos el segundo más cercano). */
+function defaultSelection(list) {
+  if (!list.length) return [];
+  const nearest = list[0];
+  const cheapest = list.find((s) => s.cheapest) || list[1];
+  const second = cheapest && cheapest.supermarket_id !== nearest.supermarket_id ? cheapest : list[1];
+  return [nearest, second].filter(Boolean).map((s) => s.supermarket_id);
+}
+
 /**
  * Paso «¿Dónde estás?»: ubicación del usuario + elegir 2-3 supermercados cercanos.
  * location: {lat, lon, label} | null · selected: ["S1", ...]
@@ -21,7 +30,7 @@ export default function LocationPicker({ location, setLocation, selected, setSel
         setStores(list);
         // Si aún no ha elegido, preseleccionamos los 2 más cercanos
         setSelected((prev) => (prev.length ? prev.filter((id) => list.some((s) => s.supermarket_id === id))
-                                           : list.slice(0, 2).map((s) => s.supermarket_id)));
+                                           : defaultSelection(list)));
       })
       .catch((e) => setError(e.message));
   }, [location]); // eslint-disable-line react-hooks/exhaustive-deps
@@ -93,6 +102,13 @@ export default function LocationPicker({ location, setLocation, selected, setSel
                     <strong>{s.name}</strong>
                     <span className="muted">{s.address}</span>
                     <span className="muted small">{s.description}</span>
+                    <span className="store-tags">
+                      <span className="price-level" aria-label={`Nivel de precio ${["", "bajo", "medio", "alto"][s.price_level]}`}>
+                        {"€".repeat(s.price_level)}<span className="price-level-off" aria-hidden="true">{"€".repeat(3 - s.price_level)}</span>
+                      </span>
+                      {s.cheapest && <span className="store-tag">El más barato</span>}
+                      {s.catalog_coverage < 1 && <span className="store-tag soft">Tiene el {Math.round(s.catalog_coverage * 100)} % de los productos</span>}
+                    </span>
                   </span>
                   <span className="store-dist">
                     <strong>{s.distance_km.toString().replace(".", ",")} km</strong>

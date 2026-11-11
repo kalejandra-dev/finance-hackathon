@@ -60,6 +60,9 @@ export default function App() {
   useEffect(() => {
     document.documentElement.style.fontSize = `${settings.scale * 100}%`;
     document.documentElement.classList.toggle("high-contrast", settings.contrast);
+    // Con el texto ampliado, la cabecera pasa a menú compacto para que no se rompa
+    document.documentElement.classList.toggle("zoom-md", settings.scale >= 1.15);
+    document.documentElement.classList.toggle("zoom-lg", settings.scale >= 1.3);
     try {
       localStorage.setItem("olivia-settings", JSON.stringify(settings));
     } catch {
@@ -166,8 +169,8 @@ export default function App() {
           <div className="footer-col">
             <h2>Accesibilidad</h2>
             <span>Navegación con teclado</span>
-            <span>Alto contraste ◐</span>
-            <span>Texto ampliable A</span>
+            <span>Alto contraste</span>
+            <span>Texto ampliable (A− / A+)</span>
             <span>Lectura en voz alta 🔊</span>
           </div>
           <div className="footer-col">
