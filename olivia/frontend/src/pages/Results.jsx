@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { api } from "../services/api.js";
 import { resultSummary, speak } from "../services/voice.js";
+import RouteMap from "../components/RouteMap.jsx";
 
 const eur = (n) => (n == null ? "—" : `${n.toFixed(2).replace(".", ",")} €`);
 
@@ -86,7 +87,7 @@ function ConfirmPurchase({ resultId, confirmed, onConfirmed, onBudget, onNew }) 
   );
 }
 
-export default function Results({ result, autoVoice, onEdit, onBudget, onConfirmed, onNew }) {
+export default function Results({ result, location, autoVoice, onEdit, onBudget, onConfirmed, onNew }) {
   const { optimized, best_single_store: single, net_saving, budget, unavailable_items } = result;
   const summary = resultSummary(result);
 
@@ -116,7 +117,9 @@ export default function Results({ result, autoVoice, onEdit, onBudget, onConfirm
         <PlanCard title="Compra optimizada" plan={optimized} best={net_saving > 0} />
       </div>
 
-      <h3 className="section-title">🗺️ Tu ruta de compra</h3>
+      {optimized && <RouteMap location={location} storeIds={optimized.stores.map((s) => s.supermarket_id)} />}
+
+      <h3 className="section-title">🧾 Qué comprar en cada supermercado</h3>
       {optimized?.stores.map((s, idx) => (
         <div key={s.supermarket_id} className="card">
           <h3><span className="stop">{idx + 1}</span> {s.name} <small className="muted">· {s.address} · {s.distance_km} km</small></h3>

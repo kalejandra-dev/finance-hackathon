@@ -31,6 +31,7 @@ def init_db() -> None:
             DROP TABLE IF EXISTS products;
             CREATE TABLE supermarkets (
                 supermarket_id TEXT PRIMARY KEY, name TEXT, address TEXT,
+                lat REAL, lon REAL, description TEXT,
                 distance_km REAL, travel_cost_eur REAL);
             CREATE TABLE products (
                 item TEXT, supermarket_id TEXT, product_name TEXT,
@@ -46,7 +47,7 @@ def init_db() -> None:
         )
         with open(DATA_DIR / "supermarkets.csv", encoding="utf-8") as f:
             conn.executemany(
-                "INSERT INTO supermarkets VALUES (:supermarket_id,:name,:address,:distance_km,:travel_cost_eur)",
+                "INSERT INTO supermarkets VALUES (:supermarket_id,:name,:address,:lat,:lon,:description,:distance_km,:travel_cost_eur)",
                 list(csv.DictReader(f)),
             )
         with open(DATA_DIR / "products.csv", encoding="utf-8") as f:

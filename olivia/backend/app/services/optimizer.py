@@ -18,6 +18,7 @@ from typing import Optional
 import pulp
 
 from app.database.catalog import get_catalog, get_supermarkets
+from app.services import geo
 from app.schemas.models import Assignment, ListItem, OptimizeResult, Plan, StoreSummary
 
 
@@ -36,8 +37,7 @@ def _line(item: ListItem, sid: str) -> Assignment:
     )
 
 
-def _build_plan(assignments: list[Assignment], include_travel: bool) -> Plan:
-    stores = get_supermarkets()
+def _build_plan(assignments: list[Assignment], include_travel: bool, stores: dict) -> Plan:
     used = sorted({a.supermarket_id for a in assignments}, key=lambda s: stores[s]["distance_km"])
     summaries = []
     for sid in used:
@@ -64,9 +64,29 @@ def _merge_duplicates(items: list[ListItem]) -> list[ListItem]:
     return list(merged.values())
 
 
+def _candidate_stores(supermarket_ids: Optional[list[str]], location: Optional[dict]) -> dict:
+    """Supermercados que puede usar el optimizador.
+
+    - supermarket_ids: los que ha elegido el usuario (None = todos).
+    - location: {"lat", "lon"} del usuario; si se da, distancia y coste de desplazamiento
+      se calculan desde ahí en vez de usar los valores fijos del CSV.
+    """
+    stores = {sid: dict(s) for sid, s in get_supermarkets().items()
+              if not supermarket_ids or sid in supermarket_ids}
+    if location:
+        for s in stores.values():
+            d = round(geo.haversine_km((location["lat"], location["lon"]), (s["lat"], s["lon"])), 2)
+            s["distance_km"], s["travel_cost_eur"] = d, geo.travel_cost(d)
+    return stores
+
+
 def optimize(items: list[ListItem], max_stores: int = 2, budget: Optional[float] = None,
-             include_travel: bool = True) -> OptimizeResult:
-    catalog, stores = get_catalog(), get_supermarkets()
+             include_travel: bool = True, supermarket_ids: Optional[list[str]] = None,
+             location: Optional[dict] = None) -> OptimizeResult:
+    stores = _candidate_stores(supermarket_ids, location)
+    # Ofertas solo de los supermercados elegidos
+    catalog = {name: {s: o for s, o in offers.items() if s in stores} for name, offers in get_catalog().items()}
+    catalog = {name: offers for name, offers in catalog.items() if offers}
     items = _merge_duplicates(items)
     available = [it for it in items if it.name in catalog]
     unavailable = [it.name for it in items if it.name not in catalog]
@@ -92,7 +112,7 @@ def optimize(items: list[ListItem], max_stores: int = 2, budget: Optional[float]
     optimized = None
     if pulp.LpStatus[prob.status] == "Optimal":
         chosen = [_line(it, s) for it in available for s in catalog[it.name] if x[(it.name, s)].value() > 0.5]
-        optimized = _build_plan(chosen, include_travel)
+        optimized = _build_plan(chosen, include_travel, stores)
     else:
         # p. ej. max_stores=1 y ningún súper tiene todos los productos
         unavailable_msg = "No hay combinación posible con ese número de supermercados"
@@ -102,7 +122,7 @@ def optimize(items: list[ListItem], max_stores: int = 2, budget: Optional[float]
     single = None
     for s in stores:
         if all(s in catalog[it.name] for it in available):
-            plan = _build_plan([_line(it, s) for it in available], include_travel)
+            plan = _build_plan([_line(it, s) for it in available], include_travel, stores)
             if single is None or plan.total_cost < single.total_cost:
                 single = plan
 

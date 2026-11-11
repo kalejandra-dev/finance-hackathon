@@ -30,6 +30,8 @@ export default function App() {
   const [budget, setBudget] = useState(35);
   const [maxStores, setMaxStores] = useState(2);
   const [result, setResult] = useState(null);
+  const [location, setLocation] = useState(null); // {lat, lon, label}
+  const [selectedStores, setSelectedStores] = useState([]); // supers elegidos (2-3)
   const [chat, setChat] = useState(initialChat); // se conserva al cambiar de pantalla
   const [settings, setSettings] = useState(loadSettings);
 
@@ -96,10 +98,12 @@ export default function App() {
             budget={budget} setBudget={setBudget}
             maxStores={maxStores} setMaxStores={setMaxStores}
             onOptimized={(r) => { setResult(r); go("results"); }}
+            location={location} setLocation={setLocation}
+            selectedStores={selectedStores} setSelectedStores={setSelectedStores}
           />
         )}
         {step === "results" && result && (
-          <Results result={result} autoVoice={settings.autoVoice} onEdit={() => go("list")} onBudget={() => go("budget")}
+          <Results result={result} location={location} autoVoice={settings.autoVoice} onEdit={() => go("list")} onBudget={() => go("budget")}
             onConfirmed={() => setResult((r) => ({ ...r, confirmed: true }))}
             onNew={() => { setItems([]); setResult(null); setChat(initialChat()); go("planner"); }} />
         )}
