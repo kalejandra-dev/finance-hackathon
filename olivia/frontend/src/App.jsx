@@ -47,6 +47,15 @@ export default function App() {
   const [chat, setChat] = useState(initialChat); // se conserva al cambiar de pantalla
   const [settings, setSettings] = useState(loadSettings);
   const [menuOpen, setMenuOpen] = useState(false);
+  const [pendingPrompt, setPendingPrompt] = useState(null); // idea pulsada en la portada
+  const [scrolled, setScrolled] = useState(false);
+
+  // Sombra suave en la cabecera al bajar
+  useEffect(() => {
+    const onScroll = () => setScrolled(window.scrollY > 8);
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => window.removeEventListener("scroll", onScroll);
+  }, []);
 
   useEffect(() => {
     document.documentElement.style.fontSize = `${settings.scale * 100}%`;
@@ -74,7 +83,7 @@ export default function App() {
   return (
     <>
       <a className="skip-link" href="#main">Saltar al contenido</a>
-      <header className="site-header">
+      <header className={scrolled ? "site-header scrolled" : "site-header"}>
         <div className="header-inner">
           <button className="unstyled-logo" onClick={() => go("home")} aria-label="OlivIA, ir al inicio">
             <Brand />
@@ -107,7 +116,10 @@ export default function App() {
 
       <main id="main" className={`page-${step}`}>
         <div className="page-enter" key={step}>
-          {step === "home" && <Home onStart={() => go("planner")} onBudget={() => go("budget")} />}
+          {step === "home" && (
+            <Home onStart={() => go("planner")} onBudget={() => go("budget")}
+              onIdea={(text) => { setPendingPrompt(text); go("planner"); }} />
+          )}
           {step === "planner" && (
             <Planner
               items={items} setItems={setItems}
@@ -115,6 +127,7 @@ export default function App() {
               maxStores={maxStores} setMaxStores={setMaxStores}
               autoVoice={settings.autoVoice}
               messages={chat} setMessages={setChat}
+              initialPrompt={pendingPrompt} onPromptUsed={() => setPendingPrompt(null)}
               onDone={() => go("list")} onManual={() => go("list")}
             />
           )}
@@ -139,14 +152,34 @@ export default function App() {
       </main>
 
       <footer className="site-footer">
-        <div className="footer-inner">
-          <Brand small />
-          <span>Compra mejor. Ahorra más.</span>
-          <div>
-            <span>Precios de demostración: datos de ejemplo, no son precios reales.</span>
-            <span aria-hidden="true">·</span>
-            <span>HackFinance 2026 · MVP</span>
+        <div className="footer-top">
+          <div className="footer-brand">
+            <Brand small />
+            <p className="footer-claim">Compra mejor.<br /><em>Ahorra más.</em></p>
           </div>
+          <nav className="footer-col" aria-label="La app">
+            <h2>La app</h2>
+            {NAV.filter((n) => n.id !== "home").map((n) => (
+              <button key={n.id} onClick={() => go(n.id)} disabled={n.id === "results" && !result}>{n.label}</button>
+            ))}
+          </nav>
+          <div className="footer-col">
+            <h2>Accesibilidad</h2>
+            <span>Navegación con teclado</span>
+            <span>Alto contraste ◐</span>
+            <span>Texto ampliable A</span>
+            <span>Lectura en voz alta 🔊</span>
+          </div>
+          <div className="footer-col">
+            <h2>Proyecto</h2>
+            <span>HackFinance 2026 · MVP</span>
+            <span>IA de lenguaje y voz</span>
+            <span>Optimización matemática</span>
+          </div>
+        </div>
+        <div className="footer-bottom">
+          <span>🔒 Sin cuenta bancaria conectada · Precios de demostración, no son precios reales.</span>
+          <span>© 2026 OlivIA</span>
         </div>
       </footer>
     </>

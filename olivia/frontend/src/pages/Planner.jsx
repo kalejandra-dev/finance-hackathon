@@ -18,7 +18,7 @@ const GREETING = "¡Hola! Soy OlivIA. Dime qué quieres cocinar o comprar, tu pr
 export const initialChat = () => [{ from: "olivia", text: GREETING }];
 
 export default function Planner({ items, setItems, budget, setBudget, maxStores, setMaxStores, autoVoice, onDone,
-  onManual, messages, setMessages }) {
+  onManual, messages, setMessages, initialPrompt, onPromptUsed }) {
   const [text, setText] = useState("");
   const [loading, setLoading] = useState(false);
   const chatEnd = useRef(null);
@@ -33,6 +33,16 @@ export default function Planner({ items, setItems, budget, setBudget, maxStores,
     el.style.height = "auto";
     el.style.height = `${el.scrollHeight + 4}px`;
   }, [text]);
+
+  // Si se llega desde una idea de la portada, OlivIA empieza con esa petición (una sola vez)
+  const startedFromIdea = useRef(false);
+  useEffect(() => {
+    if (initialPrompt && !startedFromIdea.current) {
+      startedFromIdea.current = true;
+      onPromptUsed?.();
+      send(initialPrompt);
+    }
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   const say = (t) => {
     setMessages((m) => [...m, { from: "olivia", text: t }]);
