@@ -23,7 +23,7 @@
 | 🗺️ **Tu recorrido** | Mapa con la ruta a pie (OpenStreetMap + OSRM) y un botón para abrirla en Google Maps. |
 | 💶 **Mi presupuesto** | Presupuesto restante, gasto por supermercado e historial de las compras confirmadas con el ahorro acumulado. |
 | 🔊 **Respuestas habladas** | OlivIA lee en voz alta sus respuestas y el resumen de la compra (ElevenLabs). |
-| ♿ **Accesibilidad** | Texto ampliable (A− / A+), modo de alto contraste (negro, blanco y amarillo), navegación con teclado y voz activable o desactivable. |
+| ♿ **Accesibilidad** | Texto ampliable (A− / A+), modo de alto contraste (negro, blanco y verde), navegación con teclado y voz activable o desactivable. |
 
 ---
 
